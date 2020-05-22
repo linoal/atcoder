@@ -41,7 +41,7 @@ class Test
 
     def test_one_case(ruby_path, input, expected, test_num)
         test_passed = false
-        IO.popen("ruby #{ruby_path}", 'w+', :err => [:child, :out]) do |io|
+        io = IO.popen("ruby #{ruby_path}", 'w+', :err => [:child, :out]) do |io|
             if input.is_a? String
                 io.puts input
             else
@@ -52,15 +52,21 @@ class Test
             puts "[#{test_num}]-------------------------"
             actual = receive_result(io)
             test_passed = (actual == expected)
-            puts "actual:   #{actual}\tjudge: #{test_passed ? 'OK': 'NG'}"
-            puts "expected: #{expected}\ttime:  #{ ((Time.now - time_before)*1000).to_i }ms"
+
+            # 結果出力。行数によってフォーマットを分ける。
+            if actual.count("\n")==0 && expected.count("\n")==0
+                puts "actual:   #{actual}\tjudge: #{test_passed ? 'OK': 'NG'}"
+                puts "expected: #{expected}\ttime:  #{ ((Time.now - time_before)*1000).to_i }ms"
+            else
+                puts "actual:\n#{actual}\nexpected:\n#{expected}\njudge: #{test_passed ? 'OK':'NG'}  time: #{ ((Time.now - time_before)*1000).to_i }ms"
+            end
         end
         test_passed
     end
 
     def receive_result(io)
         loop do
-            received = io.gets&.chomp
+            received = io.read&.chomp
             puts "Error: Result is nil. (expected string)" if received.nil?
             if received[0..1] == 'd:'
                 puts "debug: #{received[2..-1]}"
