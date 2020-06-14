@@ -15,7 +15,9 @@ class Test
     end
 
     def add(input, expected)
-        @test_cases << {input: input, expected: expected}
+        inp = input.each_line.map{ |l| l.chomp.strip }.join("\n").chomp
+        exp = expected.each_line.map{ |l| l.chomp.strip }.join("\n").chomp
+        @test_cases << {input: inp, expected: exp}
     end
 
     def run
