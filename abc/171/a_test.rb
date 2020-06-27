@@ -1,41 +1,32 @@
 require "~/atcoder/lib/test"
-t = Test.new(__dir__ << '/' << 'd.rb')
+t = Test.new(__dir__ << '/' << 'a.rb')
 i,e = [], []
 
 # [1]---------------------
 i.push <<IN1
-5
-24 11 8 3 16
-
+input1
 IN1
 
 e.push <<EXP1
-3
-
+expect1
 EXP1
 
 # [2]---------------------
 i.push <<IN2
-4
-5 5 5 5 10
-
+input2
 IN2
 
 e.push <<EXP2
-0
-
+expect2
 EXP2
 
 # [3]---------------------
 i.push <<IN3
-10
-33 18 45 28 8 19 89 86 2 4
-
+input3
 IN3
 
 e.push <<EXP3
-5
-
+expect3
 EXP3
 
 # [4]---------------------
