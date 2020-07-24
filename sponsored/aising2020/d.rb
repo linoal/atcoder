@@ -1,4 +1,11 @@
-
+def popcount(x)
+    p = 0
+    while x > 0
+        x &= x - 1
+        p += 1
+    end
+    return p
+end
 
 N = gets.to_i
 X = gets.to_i(2)
@@ -9,33 +16,30 @@ N.times do |i|
     p0 += 1 if X[i] == 1
 end
 
+
+x0_mod_pp1 = X % (p0+1)
+x0_mod_pm1 = X % (p0-1) if p0 != 1
+
 N.times do |i|
-    xi = X
+    next if X ^ (1 << i) == 0
     pi = p0
-    if xi[i] == 1
-        # p xi
+    r = 0
+    if X[i] == 1
         pi -= 1
-        mask = ~(1 << i)
-        # p mask.to_s(2)
-        xi = xi & mask
-        # p xi
+        r = (x0_mod_pm1 - 2.pow(i, pi) + pi) % pi
+        ans[i] += 1
     else
-        # p xi
         pi += 1
-        xi = xi | (1 << i)
-        # p xi
+        r = (x0_mod_pp1 + 2.pow(i, pi)) % pi
+        ans[i] += 1
     end
     
-    r = xi
+    # r = xi
+    # p r
     while r != 0 do
-        # p r
+        pi = popcount(r)
         r = r % pi
         ans[i] += 1
-        pi = 0
-        r.to_s(2).length.times do |i|
-            pi += 1 if r[i] == 1
-        end
     end
-    # puts '---'
 end
 puts ans.reverse

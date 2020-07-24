@@ -1,0 +1,16 @@
+[Case 1 Input]
+
+[Case 1 Expect]
+SolverA.solve called
+
+
+
+[Case 2 Input]
+
+[Case 2 Expect]
+
+
+
+[Case 3 Input]
+
+[Case 3 Expect]

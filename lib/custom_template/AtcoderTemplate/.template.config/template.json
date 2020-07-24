@@ -1,0 +1,25 @@
+{
+	"$schema": "http://json.schemastore.org/template",
+	"author": "Linoal",
+	"classifications": [
+		"Common",
+        "Code",
+        "Atcoder"
+	],
+	"identity": "atcoder_teplate.linoal",
+	"name": "Atcoder Template",
+	"shortName": "atcoder",
+	"tags": {
+		"language": "C#",
+		"type": "item"
+	},
+
+	"symbols":{
+		"ProjectName":{
+			"type": "parameter",
+			"replaces": "PROJECT_NAME",
+			"FileRename": "PROJECT_NAME",
+			"isRequired": true
+		}
+	}
+}
