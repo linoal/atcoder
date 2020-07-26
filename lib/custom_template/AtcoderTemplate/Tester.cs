@@ -7,7 +7,7 @@ using static System.Console;
 
 namespace PROJECT_NAME
 {
-    class Tester
+    static class Tester
     {
 
         public static void TestQuestion(Action targetAct, string fileName)

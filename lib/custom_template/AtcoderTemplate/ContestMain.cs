@@ -3,7 +3,7 @@ using static System.Console;
 
 namespace PROJECT_NAME
 {
-    class ContestMain
+    static class ContestMain
     {
         static void Main(){
 chooseOp:

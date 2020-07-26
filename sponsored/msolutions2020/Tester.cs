@@ -80,6 +80,7 @@ namespace msolutions2020
                 while( ! reader.EndOfStream )
                 {
                     var line = reader.ReadLine();
+                    if (line.StartsWith("[End]")) break;
                     switch(state)
                     {
                         case 0: // [Case n Input] を検索中
