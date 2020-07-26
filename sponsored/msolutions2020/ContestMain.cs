@@ -1,7 +1,7 @@
 using System;
 using static System.Console;
 
-namespace PROJECT_NAME
+namespace msolutions2020
 {
     class ContestMain
     {

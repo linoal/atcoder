@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using static System.Math;
 using static System.Console;
 
-namespace PROJECT_NAME
+namespace msolutions2020
 {
-    class SolverA
+    class SolverE
     {
         static void Main()
         {
@@ -15,8 +15,7 @@ namespace PROJECT_NAME
 
         public static void Solve()
         {
-            var n = int.Parse(ReadLine());
-            WriteLine(n);
+            
         }
     }
 }

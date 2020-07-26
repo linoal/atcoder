@@ -6,7 +6,7 @@ using static System.Console;
 
 namespace PROJECT_NAME
 {
-    class SolverA
+    class SolverB
     {
         static void Main()
         {
@@ -15,8 +15,10 @@ namespace PROJECT_NAME
 
         public static void Solve()
         {
-            var n = int.Parse(ReadLine());
-            WriteLine(n);
+            var a = int.Parse(ReadLine());
+            var b = int.Parse(ReadLine());
+            WriteLine(a+b);
+            WriteLine(a-b);
         }
     }
 }

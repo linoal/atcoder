@@ -1,17 +1,18 @@
 [Case 1 Input]
-123
+7 2 5
+3
+
 [Case 1 Expect]
-123
+Yes
+
 
 
 
 [Case 2 Input]
--3
+7 4 2
+3
+
 [Case 2 Expect]
--3
+No
 
 
-[Case 3 Input]
-7777777
-[Case 3 Expect]
-7777777

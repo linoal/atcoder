@@ -1,0 +1,14 @@
+[Case 1 Input]
+725
+
+[Case 1 Expect]
+7
+
+
+
+
+[Case 2 Input]
+1600
+
+[Case 2 Expect]
+2

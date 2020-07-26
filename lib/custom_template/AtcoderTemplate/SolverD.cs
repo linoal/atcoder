@@ -6,7 +6,7 @@ using static System.Console;
 
 namespace PROJECT_NAME
 {
-    class SolverA
+    class SolverD
     {
         static void Main()
         {

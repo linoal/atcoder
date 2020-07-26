@@ -1,17 +1,22 @@
 [Case 1 Input]
-123
+1
+2
 [Case 1 Expect]
-123
+3
+-1
 
 
 
 [Case 2 Input]
--3
+-90
+80
 [Case 2 Expect]
--3
-
+-10
+-170
 
 [Case 3 Input]
-7777777
+1
+1
 [Case 3 Expect]
-7777777
+-99
+-99
