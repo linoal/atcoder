@@ -33,6 +33,10 @@ namespace msolutions2020
                 V[i].y = vil.y;
                 V[i].p = vil.p;
             }
+
+
+            // 事前辞書の構築 X
+
             long pow2_N = IntPow(2,(uint)N);
             costX = new Dictionary<ulong,long>[V.Length];
             for(int i=0; i<V.Length; i++)
@@ -49,10 +53,11 @@ namespace msolutions2020
                     {
                         ptnKey = (ptnX >> i & 1)==1 ? (ptnKey | ((ulong)1 << 2*i)) : ptnKey;
                     }
-                    // WriteLine($"x: ptnKey={Convert.ToString(ptnKey,2)}");
                     costX[vil].Add(ptnKey, Dim1Pattern.DistX(ptnX, V[vil], V) * V[vil].p);
                 }
             }
+
+            // 事前辞書の構築 Y
 
             costY = new Dictionary<ulong,long>[V.Length];
             for(int i=0; i<V.Length; i++)
@@ -68,28 +73,21 @@ namespace msolutions2020
                     {
                         ptnKey = (ptnY >> i & 1)==1 ? (ptnKey | ((ulong)1 << 2*i+1)) : ptnKey;
                     }
-                    // WriteLine($"y: ptnKey={Convert.ToString(ptnKey,2)}");
                     costY[vil].Add(ptnKey, Dim1Pattern.DistY(ptnY, V[vil], V) * V[vil].p);
                 }
             }
 
-            //WriteLine("dict gen.");
-
             // 事前辞書の構築 ここまで
-
+            // メインループ開始
 
             Pattern pattern = new Pattern(N);
             long[] ans = Repeat(long.MaxValue, N+1).ToArray();
-            // long ptnNum = 0; //debug
             do
             {
-                // WriteLine($"pattern: {Convert.ToString(pattern.pattern,2).PadLeft(N*2, '0')}  train: {pattern.trainNum}");
                 int t = BitOperations.PopCount(pattern.pattern);
                 ans[t] = Min(ans[t], cost(pattern.pattern));
 
-                // ptnNum++; //debug
             }while(pattern.Next() != null);
-            // WriteLine($"ptnnum: {ptnNum}");
 
             foreach(var a in ans)
             {
@@ -108,10 +106,9 @@ namespace msolutions2020
             
             for (int v = 0; v < vLength; v++)
             {
-                if( ((ptn >> (v * 2)) & 0b11) > 0 ) continue;
+                if( ((ptn >> (v *2)) & 0b11) > 0 ) continue; // 集落上に道があるならゼロコスト
                 cost += Min(costX[v][ptn & xmask], costY[v][ptn & ymask]);
             }
-            // WriteLine(string.Join(", ", ptn.pattern) + $"  train:{ptn.trainNum}   cost:{cost}");
             return cost;
         }
 
@@ -125,7 +122,6 @@ namespace msolutions2020
         class Pattern
         {
             public ulong pattern;
-            // public int trainNum = 0;
             int N;
 
             public Pattern(int _n)
@@ -138,24 +134,18 @@ namespace msolutions2020
             {
                 pattern++;
                 
-                // if(/*this[0]*/ (pattern & 0b11) == 1)
-                // {
-                //     trainNum++;
-                // }
                 for (int i = 0; i < N ; i++)
                 {
 
                     if(this[i] > 2) // 繰り上がる
                     {
-                        this[i] = 0;// trainNum--;
+                        this[i] = 0;
                         this[i+1]++;
-                        // if(this[i+1] == 1) trainNum++;
                         
                     }else break; // 繰り上がらない
 
                     if(this[N] == 1) {return null;} // 終了
                 }
-                // WriteLine("pattern: " + Convert.ToString(pattern, 2) + "   train: " + trainNum);
                 return this;
             }
          

@@ -1,17 +1,24 @@
-[Case 1 Input]
+// TEST CASE DSL
+
+// Command List: [Case Input],  [Case Output],
+//               [End],         // (Comment)
+//               [Rep n] (n=any number)
+
+
+[Case Input]
 123
-[Case 1 Expect]
+[Case Expect]
 123
 
 
 
-[Case 2 Input]
+[Case Input]
 -3
-[Case 2 Expect]
+[Case Expect]
 -3
 
 
-[Case 3 Input]
+[Case Input]
 7777777
-[Case 3 Expect]
+[Case Expect]
 7777777

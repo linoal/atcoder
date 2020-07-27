@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using static System.Math;
@@ -11,10 +12,12 @@ namespace PROJECT_NAME
     {
         static void Main()
         {
-            Solve();
+            SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
+            new SolverA().Solve();
+            Out.Flush();
         }
 
-        public static void Solve()
+        public void Solve()
         {
             var n = Get.Int();
             WriteLine(n);

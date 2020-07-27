@@ -13,11 +13,11 @@ namespace PROJECT_NAME
         static void Main()
         {
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
-        public static void Solve()
+        public void Solve()
         {
             (var N, var K) = Get.Tuple<int,int>();
             int[] A = Get.Ints();

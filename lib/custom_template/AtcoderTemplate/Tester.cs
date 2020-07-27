@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static System.Console;
 
 namespace PROJECT_NAME
@@ -30,8 +31,8 @@ namespace PROJECT_NAME
         // 戻り値 : caseNum番のテストケースが存在しない場合はnull、存在する場合はテストをしてその成否がboolで返る。
         public static bool? TestCase(Action targetAct, string fileName, int caseNum)
         {
-            var caseInput = ReadDSLChunk(fileName, $"[Case {caseNum} Input]");
-            var caseExpect = ReadDSLChunk(fileName, $"[Case {caseNum} Expect]");
+            var caseInput = ReadTestCaseInput(caseNum, fileName);
+            var caseExpect = ReadTestCaseExpect(caseNum, fileName);
             if (caseInput == "" && caseExpect == "") return null;
             var savedConsoleOut = Console.Out;
             using (var input = new StringReader(caseInput))
@@ -70,33 +71,65 @@ namespace PROJECT_NAME
             }
         }
 
-        // テキストファイルの一部を読む。読む範囲は指定チャンクタグ(例: "[Case 1 Input]")の次行から次のチャンクタグまたはEOFまで
-        static string ReadDSLChunk(string fileName, string chunkTag)
+        static string ReadTestCaseInput(int caseNum, string fileName)
+        {
+            return ReadDSLChunk(fileName, "[Case Input]", caseNum);
+        }
+
+        static string ReadTestCaseExpect(int caseNum, string fileName)
+        {
+            return ReadDSLChunk(fileName, "[Case Expect]", caseNum);
+        }
+
+        // テキストファイルの一部を読む。読む範囲は指定のチャンクタグ(例: "[Case Input]")が tagNumber 番目に現れた箇所の次行から次のチャンクタグまたはEOFまで
+        static string ReadDSLChunk(string fileName, string chunkTag, int tagNumber)
         {
             var sb = new StringBuilder();
             using (var reader = new StreamReader(fileName))
             {
                 var state = 0;
+                int tagCnt = 0;
+                string prevLine = "";
                 while( ! reader.EndOfStream )
                 {
                     var line = reader.ReadLine();
+                    if (line.StartsWith("//")) continue; // 「//」はコメント行なので無視
+                    if (line.StartsWith("[End]")) break; // [END]以降は無視
+                    
                     switch(state)
                     {
-                        case 0: // [Case n Input] を検索中
+                        case 0: // 指定チャンクタグを検索中
                             if (line == chunkTag)
                             {
-                                state = 1;
+                                tagCnt++;
+                                if (tagCnt == tagNumber)
+                                {
+                                    state = 1;
+                                }
+                                
                             }
                             break;
-                        case 1: // [Case n Input]の中身
+                        case 1: // 指定チャンクタグの中身を読込中
                             if (line.StartsWith("[Case"))
                             {
                                 reader.ReadToEnd(); // 次のタグが来たのでファイル読み込み終了。中身は見ずにポインタだけ最後まで進める。
                                 break;
+                            }else if (line.StartsWith("[Rep")) // [Rep n]
+                            {
+                                // WriteLine(line);
+                                // WriteLine($"reg: {Regex.Match(line, @"\[Rep\s*(\d+)").Groups[1].Value}");
+                                int repNum = int.Parse(Regex.Match(line, @"\[Rep\s*(\d+)").Groups[1].Value);
+                                for (int i = 0; i < repNum - 1; i++)
+                                {
+                                    sb.AppendLine(prevLine);
+                                }
+                            }else
+                            {
+                                sb.AppendLine(line);
                             }
-                            sb.AppendLine(line);
                             break;
                     }
+                    prevLine = line;
                 }
             }
             return sb.ToString().Trim();

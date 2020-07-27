@@ -1,28 +1,28 @@
-[Case 1 Input]
+[Case Input]
 5 3
 96 98 95 100 20
 
-[Case 1 Expect]
+[Case Expect]
 Yes
 No
 
 
 
 
-[Case 2 Input]
+[Case Input]
 3 2
 1001 869120 1001
 
-[Case 2 Expect]
+[Case Expect]
 No
 
 
 
-[Case 3 Input]
+[Case Input]
 15 7
 3 1 4 1 5 9 2 6 5 3 5 8 9 7 9
 
-[Case 3 Expect]
+[Case Expect]
 Yes
 Yes
 No

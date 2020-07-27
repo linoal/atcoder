@@ -12,34 +12,34 @@ chooseOp:
             switch(q)
             {
                 case "ea":
-                    SolverA.Solve();
+                    new SolverA().Solve();
                     break;
                 case "ta":
-                    Tester.TestQuestion(SolverA.Solve, "TestCasesA.txt");
+                    Tester.TestQuestion(new SolverA().Solve, "TestCasesA.txt");
                     break;
                 case "eb":
-                    SolverB.Solve();
+                    new SolverB().Solve();
                     break;
                 case "tb":
-                    Tester.TestQuestion(SolverB.Solve, "TestCasesB.txt");
+                    Tester.TestQuestion(new SolverB().Solve, "TestCasesB.txt");
                     break;
                 case "ec":
-                    SolverC.Solve();
+                    new SolverC().Solve();
                     break;
                 case "tc":
-                    Tester.TestQuestion(SolverC.Solve, "TestCasesC.txt");
+                    Tester.TestQuestion(new SolverC().Solve, "TestCasesC.txt");
                     break;
                 case "ed":
-                    SolverD.Solve();
+                    new SolverD().Solve();
                     break;
                 case "td":
-                    Tester.TestQuestion(SolverD.Solve, "TestCasesD.txt");
+                    Tester.TestQuestion(new SolverD().Solve, "TestCasesD.txt");
                     break;
                 case "ee":
-                    SolverE.Solve();
+                    new SolverE().Solve();
                     break;
                 case "te":
-                    Tester.TestQuestion(SolverE.Solve, "TestCasesE.txt");
+                    Tester.TestQuestion(new SolverE().Solve, "TestCasesE.txt");
                     break;
 
                 default:

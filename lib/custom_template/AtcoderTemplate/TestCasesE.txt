@@ -1,16 +1,16 @@
-[Case 1 Input]
+[Case Input]
 
-[Case 1 Expect]
-
-
-
-
-[Case 2 Input]
-
-[Case 2 Expect]
+[Case Expect]
 
 
 
-[Case 3 Input]
 
-[Case 3 Expect]
+[Case Input]
+
+[Case Expect]
+
+
+
+[Case Input]
+
+[Case Expect]
