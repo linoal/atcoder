@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Numerics;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
+using static System.Numerics.BitOperations;
 
 
 namespace msolutions2020
 {
     class SolverE
     {
-        Dictionary<long,long>[] costX;
-        Dictionary<long,long>[] costY;
+        Dictionary<ulong,long>[] costX;
+        Dictionary<ulong,long>[] costY;
         static int N;
         static Village[] V;
         static void Main()
@@ -32,58 +34,62 @@ namespace msolutions2020
                 V[i].p = vil.p;
             }
             long pow2_N = IntPow(2,(uint)N);
-            costX = new Dictionary<long,long>[V.Length];
+            costX = new Dictionary<ulong,long>[V.Length];
             for(int i=0; i<V.Length; i++)
             {
-                costX[i] = new Dictionary<long,long>(60000);
+                costX[i] = new Dictionary<ulong,long>(60000);
                 
             }
             for(int vil=0 ; vil < V.Length ; vil++)
             {
                 for(int ptnX = 0; ptnX < pow2_N; ptnX++)
                 {
-                    int ptnKey = 0;
+                    ulong ptnKey = 0;
                     for(int i=0; i<N; i++)
                     {
-                        ptnKey = (ptnX >> i & 1)==1 ? (ptnKey | (1 << 2*i)) : ptnKey;
+                        ptnKey = (ptnX >> i & 1)==1 ? (ptnKey | ((ulong)1 << 2*i)) : ptnKey;
                     }
-                    // Dim1Pattern ptn = new Dim1Pattern(ptnKey, N);
                     // WriteLine($"x: ptnKey={Convert.ToString(ptnKey,2)}");
                     costX[vil].Add(ptnKey, Dim1Pattern.DistX(ptnX, V[vil], V) * V[vil].p);
                 }
             }
 
-            costY = new Dictionary<long,long>[V.Length];
+            costY = new Dictionary<ulong,long>[V.Length];
             for(int i=0; i<V.Length; i++)
             {
-                costY[i] = new Dictionary<long,long>(60000);
+                costY[i] = new Dictionary<ulong,long>(60000);
             }
             for(int vil=0 ; vil < V.Length ; vil++)
             {
                 for(int ptnY = 0; ptnY < pow2_N; ptnY++)
                 {
-                    int ptnKey = 0;
+                    ulong ptnKey = 0;
                     for(int i=0; i<N; i++)
                     {
-                        ptnKey = (ptnY >> i & 1)==1 ? (ptnKey | (1 << 2*i+1)) : ptnKey;
+                        ptnKey = (ptnY >> i & 1)==1 ? (ptnKey | ((ulong)1 << 2*i+1)) : ptnKey;
                     }
-                    // Dim1Pattern ptn = new Dim1Pattern(ptnKey, N);
                     // WriteLine($"y: ptnKey={Convert.ToString(ptnKey,2)}");
                     costY[vil].Add(ptnKey, Dim1Pattern.DistY(ptnY, V[vil], V) * V[vil].p);
                 }
             }
+
+            //WriteLine("dict gen.");
 
             // 事前辞書の構築 ここまで
 
 
             Pattern pattern = new Pattern(N);
             long[] ans = Repeat(long.MaxValue, N+1).ToArray();
-            while(pattern.Next() != null)
+            // long ptnNum = 0; //debug
+            do
             {
                 // WriteLine($"pattern: {Convert.ToString(pattern.pattern,2).PadLeft(N*2, '0')}  train: {pattern.trainNum}");
-                int t = pattern.trainNum;
-                ans[t] = Min(ans[t], cost(pattern.pattern, V));
-            }
+                int t = BitOperations.PopCount(pattern.pattern);
+                ans[t] = Min(ans[t], cost(pattern.pattern));
+
+                // ptnNum++; //debug
+            }while(pattern.Next() != null);
+            // WriteLine($"ptnnum: {ptnNum}");
 
             foreach(var a in ans)
             {
@@ -92,22 +98,9 @@ namespace msolutions2020
                       
         }
 
-        static long IntPow(int x, uint pow)
-        {
-            long ret = 1;
-            while ( pow != 0 )
-            {
-                if ( (pow & 1) == 1 )
-                    ret *= x;
-                x *= x;
-                pow >>= 1;
-            }
-            return ret;
-        }
-
         const long xmask = 0b_01010101010101010101010101010101;
         const long ymask = 0b_10101010101010101010101010101010;
-        long cost(long ptn, Village[] V)
+        long cost(ulong ptn)
         {
 
             int vLength = V.Length;
@@ -115,17 +108,7 @@ namespace msolutions2020
             
             for (int v = 0; v < vLength; v++)
             {
-                // long ptx = ptn & xmask;
-                // long pty = ptn & ymask;
-                // long ptx = 0;
-                // for(int i=0; i < 15; i++){
-                //     ptx |= ((ptn >> (2 * i) ) & 1) << i;
-                // }
-                // long pty = 0;
-                // for(int i=0; i < 15; i++){
-                //     pty |= ((ptn >> (2*i+1)) & 1) << i;
-                // }
-
+                if( ((ptn >> (v * 2)) & 0b11) > 0 ) continue;
                 cost += Min(costX[v][ptn & xmask], costY[v][ptn & ymask]);
             }
             // WriteLine(string.Join(", ", ptn.pattern) + $"  train:{ptn.trainNum}   cost:{cost}");
@@ -141,13 +124,13 @@ namespace msolutions2020
 
         class Pattern
         {
-            public long pattern;
-            public int trainNum = 0;
+            public ulong pattern;
+            // public int trainNum = 0;
             int N;
 
             public Pattern(int _n)
             {
-                pattern = -1;
+                pattern = 0;
                 N = _n;
             }
 
@@ -155,18 +138,18 @@ namespace msolutions2020
             {
                 pattern++;
                 
-                if(/*this[0]*/ (pattern & 0b11) == 1)
-                {
-                    trainNum++;
-                }
+                // if(/*this[0]*/ (pattern & 0b11) == 1)
+                // {
+                //     trainNum++;
+                // }
                 for (int i = 0; i < N ; i++)
                 {
 
                     if(this[i] > 2) // 繰り上がる
                     {
-                        this[i] = 0; trainNum--;
+                        this[i] = 0;// trainNum--;
                         this[i+1]++;
-                        if(this[i+1] == 1) trainNum++;
+                        // if(this[i+1] == 1) trainNum++;
                         
                     }else break; // 繰り上がらない
 
@@ -177,25 +160,16 @@ namespace msolutions2020
             }
          
 
-            public long this[int i]
+            public ulong this[int i]
             {
                 get { return (pattern >> (i*2)) & 0b11;}
-                set { pattern = (pattern & ~(0b11 << (i*2))) | value << (i*2);}
+                set { pattern = (pattern & (ulong)~(0b11 << (i*2))) | value << (i*2);}
             }
         }
   
 
         class Dim1Pattern
         {
-            // public int pattern;
-            // int N;
-
-            // public Dim1Pattern(int _pattern, int n)
-            // {
-            //     pattern = _pattern;
-            //     N = n;
-            // }
-
 
             public static long DistX(int pattern, Village v, Village [] Vils)
             {
@@ -223,6 +197,19 @@ namespace msolutions2020
                 return dist;
             }
 
+        }
+
+        static long IntPow(int x, uint pow)
+        {
+            long ret = 1;
+            while ( pow != 0 )
+            {
+                if ( (pow & 1) == 1 )
+                    ret *= x;
+                x *= x;
+                pow >>= 1;
+            }
+            return ret;
         }
 
         static class Get
