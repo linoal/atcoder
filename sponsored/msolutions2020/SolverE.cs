@@ -32,10 +32,11 @@ namespace msolutions2020
                 V[i].p = vil.p;
             }
             long pow2_N = IntPow(2,(uint)N);
-            costX = new Dictionary<long, long>[V.Length];
+            costX = new Dictionary<long,long>[V.Length];
             for(int i=0; i<V.Length; i++)
             {
-                costX[i] = new Dictionary<long,long>(600_00);
+                costX[i] = new Dictionary<long,long>(60000);
+                
             }
             for(int vil=0 ; vil < V.Length ; vil++)
             {
@@ -46,17 +47,16 @@ namespace msolutions2020
                     {
                         ptnKey = (ptnX >> i & 1)==1 ? (ptnKey | (1 << 2*i)) : ptnKey;
                     }
-                    Dim1Pattern ptn = new Dim1Pattern(ptnKey, N);
+                    // Dim1Pattern ptn = new Dim1Pattern(ptnKey, N);
                     // WriteLine($"x: ptnKey={Convert.ToString(ptnKey,2)}");
-                    costX[vil].Add(ptnKey, ptn.DistX(V[vil], V) * V[vil].p);
+                    costX[vil].Add(ptnKey, Dim1Pattern.DistX(ptnX, V[vil], V) * V[vil].p);
                 }
             }
 
-            costY = new Dictionary<long, long>[V.Length];
+            costY = new Dictionary<long,long>[V.Length];
             for(int i=0; i<V.Length; i++)
             {
-                
-                costY[i] = new Dictionary<long,long>(600_00);
+                costY[i] = new Dictionary<long,long>(60000);
             }
             for(int vil=0 ; vil < V.Length ; vil++)
             {
@@ -67,9 +67,9 @@ namespace msolutions2020
                     {
                         ptnKey = (ptnY >> i & 1)==1 ? (ptnKey | (1 << 2*i+1)) : ptnKey;
                     }
-                    Dim1Pattern ptn = new Dim1Pattern(ptnY, N);
+                    // Dim1Pattern ptn = new Dim1Pattern(ptnKey, N);
                     // WriteLine($"y: ptnKey={Convert.ToString(ptnKey,2)}");
-                    costY[vil].Add(ptnKey, ptn.DistY(V[vil], V) * V[vil].p);
+                    costY[vil].Add(ptnKey, Dim1Pattern.DistY(ptnY, V[vil], V) * V[vil].p);
                 }
             }
 
@@ -117,8 +117,16 @@ namespace msolutions2020
             {
                 // long ptx = ptn & xmask;
                 // long pty = ptn & ymask;
+                // long ptx = 0;
+                // for(int i=0; i < 15; i++){
+                //     ptx |= ((ptn >> (2 * i) ) & 1) << i;
+                // }
+                // long pty = 0;
+                // for(int i=0; i < 15; i++){
+                //     pty |= ((ptn >> (2*i+1)) & 1) << i;
+                // }
 
-                cost += checked(Min(costX[v][ptn & xmask], costY[v][ptn & ymask]));
+                cost += Min(costX[v][ptn & xmask], costY[v][ptn & ymask]);
             }
             // WriteLine(string.Join(", ", ptn.pattern) + $"  train:{ptn.trainNum}   cost:{cost}");
             return cost;
@@ -179,17 +187,17 @@ namespace msolutions2020
 
         class Dim1Pattern
         {
-            public int pattern;
-            int N;
+            // public int pattern;
+            // int N;
 
-            public Dim1Pattern(int _pattern, int n)
-            {
-                pattern = _pattern;
-                N = n;
-            }
+            // public Dim1Pattern(int _pattern, int n)
+            // {
+            //     pattern = _pattern;
+            //     N = n;
+            // }
 
 
-            public long DistX(Village v, Village [] Vils)
+            public static long DistX(int pattern, Village v, Village [] Vils)
             {
                 int dist = Abs(v.x);
                 for(int i=0; i<Vils.Length; i++)
@@ -202,7 +210,7 @@ namespace msolutions2020
                 return dist;
             }
 
-            public long DistY(Village v, Village [] Vils)
+            public static long DistY(int pattern, Village v, Village [] Vils)
             {
                 int dist = Abs(v.y);
                 for(int i=0; i<Vils.Length; i++)
