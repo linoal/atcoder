@@ -10,8 +10,8 @@ namespace msolutions2020
 {
     class SolverE
     {
-        static Dictionary<int,int>[] distDictX;
-        static Dictionary<int,int>[] distDictY;
+        static Dictionary<long,int>[] distDictX;
+        static Dictionary<long,int>[] distDictY;
         static int N;
         static Village[] V;
         static void Main()
@@ -31,31 +31,44 @@ namespace msolutions2020
                 V[i].p = vil.p;
             }
 
-            distDictX = new Dictionary<int, int>[V.Length];
+            distDictX = new Dictionary<long, int>[V.Length];
             for(int i=0; i<V.Length; i++)
             {
-                distDictX[i] = new Dictionary<int,int>(60_000);
+                distDictX[i] = new Dictionary<long,int>(60_0000);
             }
             for(int vil=0 ; vil < V.Length ; vil++)
             {
                 for(int ptnX = 0; ptnX < IntPow(2,(uint)N); ptnX++)
                 {
-                    Dim1Pattern ptn = new Dim1Pattern(ptnX, N);
-                    distDictX[vil].Add(ptnX, ptn.DistX(V[vil], V));
+                    int ptnKey = 0;
+                    for(int i=0; i<N; i++)
+                    {
+                        ptnKey = (ptnX >> i & 1)==1 ? (ptnKey | (1 << 2*i)) : ptnKey;
+                    }
+                    Dim1Pattern ptn = new Dim1Pattern(ptnKey, N);
+                    // WriteLine($"x: ptnKey={Convert.ToString(ptnKey,2)}");
+                    distDictX[vil].Add(ptnKey, ptn.DistX(V[vil], V));
                 }
             }
 
-            distDictY = new Dictionary<int, int>[V.Length];
+            distDictY = new Dictionary<long, int>[V.Length];
             for(int i=0; i<V.Length; i++)
             {
-                distDictY[i] = new Dictionary<int,int>(60_000);
+                
+                distDictY[i] = new Dictionary<long,int>(60_0000);
             }
             for(int vil=0 ; vil < V.Length ; vil++)
             {
                 for(int ptnY = 0; ptnY < IntPow(2,(uint)N); ptnY++)
                 {
+                    int ptnKey = 0;
+                    for(int i=0; i<N; i++)
+                    {
+                        ptnKey = (ptnY >> i & 1)==1 ? (ptnKey | (1 << 2*i+1)) : ptnKey;
+                    }
                     Dim1Pattern ptn = new Dim1Pattern(ptnY, N);
-                    distDictY[vil].Add(ptnY, ptn.DistY(V[vil], V));
+                    // WriteLine($"y: ptnKey={Convert.ToString(ptnKey,2)}");
+                    distDictY[vil].Add(ptnKey, ptn.DistY(V[vil], V));
                 }
             }
 
@@ -63,10 +76,13 @@ namespace msolutions2020
             
             for (int k = 0; k <= N; k++)
             {
-                long minCost = long.MaxValue;
-                var ptn = new Pattern(N);
-                while(ptn.next(k) != null)
+                long minCost = cost(0, V, k);
+                //IEnumerable<long> patterns = Pattern.Comobination(0,k,0,0,N);
+
+                foreach(long ptn in Pattern.Comobination(0,k,0,0, N) )
                 {
+                    // WriteLine("ptn: " + Convert.ToString(ptn.pattern,2));
+                    // WriteLine($"ptn: {Convert.ToString(ptn,2).PadLeft(N*2, '0')}");
                     minCost = Min(minCost, cost(ptn, V, k));
                 }
                 WriteLine(minCost);
@@ -86,27 +102,33 @@ namespace msolutions2020
             return ret;
         }
 
-        static long cost(Pattern ptn, Village[] V, int k)
+        static long xmask = 0b_010101010101010101010101010101;
+        static long ymask = 0b_101010101010101010101010101010;
+        static long cost(long ptn, Village[] V, int k)
         {
-            if(ptn.trainNum != k ) return long.MaxValue;
+            //if(ptn.trainNum != k ) return long.MaxValue;
+            // WriteLine($"Calcing cost. k={k}");
             int vLength = V.Length;
             long cost = 0;
+            
             for (int v = 0; v < vLength; v++)
             {
-                int ptx = 0;
-                for(int i=0 ; i<vLength; i++)
-                {
-                    ptx = ptn[i] == 1 ?(ptx | (1<<i)) : ptx;
-                }
-                // Dim1Pattern ptnx = new Dim1Pattern(ptx, V.Length);
+                long ptx = ptn & xmask;
+                long pty = ptn & ymask;
+                // int ptx = 0;
+                // for(int i=0 ; i<vLength; i++)
+                // {
+                //     ptx = ptn[i] == 1 ?(ptx | (1<<i)) : ptx;
+                // }
+                // // Dim1Pattern ptnx = new Dim1Pattern(ptx, V.Length);
                 
-                int pty = 0;
-                for(int i=0 ; i<vLength; i++)
-                {
-                    pty = ptn[i] == 2 ? (pty | (1<<i)) : pty;
-                }
+                // int pty = 0;
+                // for(int i=0 ; i<vLength; i++)
+                // {
+                //     pty = ptn[i] == 2 ? (pty | (1<<i)) : pty;
+                // }
                 // Dim1Pattern ptny = new Dim1Pattern(pty, V.Length);
-
+                // WriteLine($"ptx: {ptx}, pty: {pty}");
                 cost +=Min(distDictX[v][ptx], distDictY[v][pty]) * V[v].p;
             }
             // WriteLine(string.Join(", ", ptn.pattern) + $"  train:{ptn.trainNum}   cost:{cost}");
@@ -123,52 +145,136 @@ namespace msolutions2020
 
         class Pattern
         {
-            
-            public int[] pattern;
+            public long pattern;
             public int trainNum = 0;
-            public Pattern(int N)
+            int N;
+
+            public Pattern(int _n)
             {
-                pattern = Repeat(0,N+1).ToArray();
-                pattern[0] = -1;
+                pattern = -1;
+                N = _n;
             }
 
-            public int[] next(int k)
+            public static IEnumerable<long> Comobination(long pattern, int k, int step, int rightInit, int N)
             {
-                pattern[0]++;
-                
-                if(pattern[0] == 1)
+                // WriteLine($"p: {Convert.ToString(pattern,2).PadLeft(N*2, '0')} k: {k}  step:{step}");
+                if (step >= k)
                 {
-                    trainNum++;
-                     if(trainNum > k) pattern[0] = 3; // k本を超えたらその1の桁は探索スキップするため繰り上げる
+                    // pattern = pattern | ((long)1 << (2 * rightInit));
+                    
+                    yield return pattern;
+                    // pattern = pattern & ~(1 << (2 * rightInit));
+                    // pattern = pattern | ((long)1 << (2 * rightInit + 1));
+                    // yield return pattern;
+                    yield break;
                 }
-                for (int i = 0; i < pattern.Length ; i++)
+                for (int right = rightInit; right <= N - k + step; right++)
                 {
-                    if(pattern[i] == 1 && pattern[i] > k) pattern[i]=3; // 桁スキップ
-                    // if(pattern[i] <= 2) // 繰り上がらない
-                    // {
-                    //     // if( trainNum > k) // k本を超えたらその桁は探索スキップ
-                    //     // {
-                    //     //     pattern[i] = 3;
-                    //     // }
-                    // }
-                    if(pattern[i] > 2) // 繰り上がる
+                    pattern = pattern | ((long)1 << (2 * right));
+                    
+                    foreach (var newPattern in Comobination(pattern, k, step+1, right + 1, N))
                     {
-                        pattern[i] = 0; trainNum--;
-                        pattern[i+1]++;
-                        if(pattern[i+1] == 1) trainNum++;
-                        if(pattern.Last() == 1) return null;
+                        yield return newPattern;
                     }
+                    pattern = pattern & ~(1 << (2 * right));
+                    pattern = pattern | ((long)1 << (2 * right + 1));
+                    foreach (var newPattern in Comobination(pattern, k, step+1, right + 1, N))
+                    {
+                        yield return newPattern;
+                    }
+                    pattern = pattern & ~(1 << (2 * right + 1));
                 }
-                // WriteLine("pattern: " + string.Join(", ", pattern) + "   train: " + trainNum);
-                return pattern;
+
             }
 
-            public int this[int i]
+            // public long next(int k)
+            // {
+            //     pattern++;
+                
+            //     if(this[0] == 1)
+            //     {
+            //         trainNum++;
+            //          if(trainNum > k) this[0] = 3; // k本を超えたらその1の桁は探索スキップするため繰り上げる
+            //     }
+            //     for (int i = 0; i < N ; i++)
+            //     {
+            //         if(this[i] == 1 && trainNum > k) this[i]=3; // 桁スキップ
+            //         // if(pattern[i] <= 2) // 繰り上がらない
+            //         // {
+            //         //     // if( trainNum > k) // k本を超えたらその桁は探索スキップ
+            //         //     // {
+            //         //     //     pattern[i] = 3;
+            //         //     // }
+            //         // }
+            //         if(this[i] > 2) // 繰り上がる
+            //         {
+            //             this[i] = 0; trainNum--;
+            //             this[i+1]++;
+            //             if(this[i+1] == 1) trainNum++;
+            //             if(this[N] == 1) {return -1;}
+            //         }
+            //     }
+            //     // WriteLine("pattern: " + Convert.ToString(pattern, 2) + "   train: " + trainNum);
+            //     return pattern;
+            // }
+
+            public long this[int i]
             {
-                get{ return pattern[i]; }
+                get { return (pattern >> (i*2)) & 0b11;}
+                set { pattern = (pattern & ~(0b11 << (i*2))) | value << (i*2);}
             }
-
         }
+
+
+        // class Pattern
+        // {
+            
+        //     public int[] pattern;
+            
+        //     public int trainNum = 0;
+        //     public Pattern(int N)
+        //     {
+        //         pattern = Repeat(0,N+1).ToArray();
+        //         pattern[0] = -1;
+        //     }
+
+        //     public int[] next(int k)
+        //     {
+        //         pattern[0]++;
+                
+        //         if(pattern[0] == 1)
+        //         {
+        //             trainNum++;
+        //              if(trainNum > k) pattern[0] = 3; // k本を超えたらその1の桁は探索スキップするため繰り上げる
+        //         }
+        //         for (int i = 0; i < pattern.Length ; i++)
+        //         {
+        //             if(pattern[i] == 1 && pattern[i] > k) pattern[i]=3; // 桁スキップ
+        //             // if(pattern[i] <= 2) // 繰り上がらない
+        //             // {
+        //             //     // if( trainNum > k) // k本を超えたらその桁は探索スキップ
+        //             //     // {
+        //             //     //     pattern[i] = 3;
+        //             //     // }
+        //             // }
+        //             if(pattern[i] > 2) // 繰り上がる
+        //             {
+        //                 pattern[i] = 0; trainNum--;
+        //                 pattern[i+1]++;
+        //                 if(pattern[i+1] == 1) trainNum++;
+        //                 if(pattern.Last() == 1) return null;
+        //             }
+        //         }
+        //         // WriteLine("pattern: " + string.Join(", ", pattern) + "   train: " + trainNum);
+        //         return pattern;
+        //     }
+
+        //     public int this[int i]
+        //     {
+        //         get{ return pattern[i]; }
+        //     }
+
+        // }
 
         class Dim1Pattern
         {
