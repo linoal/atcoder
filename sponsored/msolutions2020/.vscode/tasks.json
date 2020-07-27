@@ -9,7 +9,8 @@
                 "build",
                 "${workspaceFolder}/msolutions2020.csproj",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary",
+                "-checked+"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -21,7 +22,8 @@
                 "publish",
                 "${workspaceFolder}/msolutions2020.csproj",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary",
+                "/checked+"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -34,7 +36,8 @@
                 "run",
                 "${workspaceFolder}/msolutions2020.csproj",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary",
+                "/checked+"
             ],
             "problemMatcher": "$msCompile"
         }

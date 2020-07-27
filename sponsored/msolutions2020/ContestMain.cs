@@ -36,10 +36,10 @@ chooseOp:
                     Tester.TestQuestion(SolverD.Solve, "TestCasesD.txt");
                     break;
                 case "ee":
-                    SolverE.Solve();
+                    new SolverE().Solve();
                     break;
                 case "te":
-                    Tester.TestQuestion(SolverE.Solve, "TestCasesE.txt");
+                    Tester.TestQuestion(new SolverE().Solve, "TestCasesE.txt");
                     break;
 
                 default:
