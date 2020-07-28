@@ -5,28 +5,65 @@ using System.Collections.Generic;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
+using static System.Numerics.BitOperations;
 
 namespace PROJECT_NAME
 {
-    class SolverC
+    class SolverE
     {
         static void Main()
         {
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverC().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve()
         {
-            (var N, var K) = Get.Tuple<int,int>();
-            int[] A = Get.Ints();
-            for (int i=K; i<N; i++)
+            var factors = Prime.PrimeFactorization(Get.Long());
+            long ans = 0;
+            foreach (var fact in factors)
             {
-                WriteLine(A[i-K] < A[i] ? "Yes" : "No");
+                // WriteLine($"{fact.prime}, {fact.exp}");
+                long exp = fact.exp;
+                int i = 1; int s = 0;
+                while(true)
+                {
+                    if( s + i <= exp )
+                    {
+                        s += i++;
+                        ans++;
+                    }else break;
+                }
             }
+            WriteLine(ans);
+            
         }
 
+        static class Prime
+            {
+                // 約数は昇順になる
+                public static List<(long prime, long exp)> PrimeFactorization(long N)
+                {
+                    var primes = new List<(long prime, long exp)>();
+                    long n = N;
+                    for (long i=2; i * i < N; i++)
+                    {
+                        long exp = 0;
+                        while (n % i == 0)
+                        {
+                            n /= i;
+                            exp++;
+                        }
+                        if (exp > 0)
+                        {
+                            primes.Add((prime: i, exp: exp));
+                        }
+                    }
+                    if (n != 1) primes.Add((prime: n, exp: 1));
+                    return primes;
+                }
+            }
 
 
 

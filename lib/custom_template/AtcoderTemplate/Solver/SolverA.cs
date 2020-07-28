@@ -5,36 +5,29 @@ using System.Collections.Generic;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
+using static System.Numerics.BitOperations;
 
 namespace PROJECT_NAME
 {
-    class SolverD
+    class SolverA
     {
         static void Main()
         {
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverA().Solve();
             Out.Flush();
         }
 
         public void Solve()
         {
             var n = Get.Int();
-            var a = new int[n];
-            foreach(var i in Range(0,n))
-            {
-                a[i] = Get.Int();
-            }
-            foreach(var i in a)
-            {
-                WriteLine(i);
-            }
+            WriteLine(n);
         }
 
 
 
 
-        private static class Get
+        static class Get
         {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
@@ -54,4 +47,6 @@ namespace PROJECT_NAME
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
         }
     }
+
+    
 }

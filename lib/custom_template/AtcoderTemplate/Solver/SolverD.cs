@@ -5,30 +5,37 @@ using System.Collections.Generic;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
+using static System.Numerics.BitOperations;
 
 namespace PROJECT_NAME
 {
-    class SolverB
+    class SolverD
     {
         static void Main()
         {
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverB().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve()
         {
-            var a = int.Parse(ReadLine());
-            var b = int.Parse(ReadLine());
-            WriteLine(a+b);
-            WriteLine(a-b);
+            var n = Get.Int();
+            var a = new int[n];
+            foreach(var i in Range(0,n))
+            {
+                a[i] = Get.Int();
+            }
+            foreach(var i in a)
+            {
+                WriteLine(i);
+            }
         }
 
 
 
 
-        static class Get
+        private static class Get
         {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());

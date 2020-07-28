@@ -3,8 +3,10 @@ using static System.Console;
 
 namespace PROJECT_NAME
 {
+    
     static class ContestMain
     {
+        static readonly string TEXT_FOLDER = "Solver";
         static void Main(){
 chooseOp:
             WriteLine("Choose operation [e,t][a,b,c,d,e]:"); // (Exec / Test) question (A/B/C/D/E)
@@ -15,31 +17,31 @@ chooseOp:
                     new SolverA().Solve();
                     break;
                 case "ta":
-                    Tester.TestQuestion(new SolverA().Solve, "TestCasesA.txt");
+                    Tester.TestQuestion(new SolverA().Solve, $"{TEXT_FOLDER}/TestCasesA.txt");
                     break;
                 case "eb":
                     new SolverB().Solve();
                     break;
                 case "tb":
-                    Tester.TestQuestion(new SolverB().Solve, "TestCasesB.txt");
+                    Tester.TestQuestion(new SolverB().Solve, $"{TEXT_FOLDER}/TestCasesB.txt");
                     break;
                 case "ec":
                     new SolverC().Solve();
                     break;
                 case "tc":
-                    Tester.TestQuestion(new SolverC().Solve, "TestCasesC.txt");
+                    Tester.TestQuestion(new SolverC().Solve, $"{TEXT_FOLDER}/TestCasesC.txt");
                     break;
                 case "ed":
                     new SolverD().Solve();
                     break;
                 case "td":
-                    Tester.TestQuestion(new SolverD().Solve, "TestCasesD.txt");
+                    Tester.TestQuestion(new SolverD().Solve, $"{TEXT_FOLDER}/TestCasesD.txt");
                     break;
                 case "ee":
                     new SolverE().Solve();
                     break;
                 case "te":
-                    Tester.TestQuestion(new SolverE().Solve, "TestCasesE.txt");
+                    Tester.TestQuestion(new SolverE().Solve, $"{TEXT_FOLDER}/TestCasesE.txt");
                     break;
 
                 default:

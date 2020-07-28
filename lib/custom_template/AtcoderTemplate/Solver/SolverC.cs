@@ -5,28 +5,33 @@ using System.Collections.Generic;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
+using static System.Numerics.BitOperations;
 
 namespace PROJECT_NAME
 {
-    class SolverA
+    class SolverC
     {
         static void Main()
         {
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverA().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
         public void Solve()
         {
-            var n = Get.Int();
-            WriteLine(n);
+            (var N, var K) = Get.Tuple<int,int>();
+            int[] A = Get.Ints();
+            for (int i=K; i<N; i++)
+            {
+                WriteLine(A[i-K] < A[i] ? "Yes" : "No");
+            }
         }
 
 
 
 
-        static class Get
+        private static class Get
         {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
@@ -46,6 +51,4 @@ namespace PROJECT_NAME
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
         }
     }
-
-    
 }
