@@ -136,7 +136,8 @@ namespace msolutions2020
                 
                 for (int i = 0; i < N ; i++)
                 {
-
+                    // this[i] は実際にはビット列(ulong)のうち連続2桁を
+                    // 操作するようにオーバーライドした。
                     if(this[i] > 2) // 繰り上がる
                     {
                         this[i] = 0;

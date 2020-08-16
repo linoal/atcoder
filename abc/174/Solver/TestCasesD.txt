@@ -1,0 +1,27 @@
+[Case Input]
+4
+WWRR
+
+[Case Expect]
+2
+
+
+
+
+[Case Input]
+2
+RR
+
+[Case Expect]
+0
+
+
+
+
+[Case Input]
+8
+WRWWRWRR
+
+
+[Case Expect]
+3

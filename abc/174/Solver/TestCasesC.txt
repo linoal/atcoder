@@ -1,0 +1,28 @@
+[Case Input]
+101
+
+
+[Case Expect]
+4
+
+
+
+
+
+[Case Input]
+2
+
+
+[Case Expect]
+-1
+
+
+
+
+[Case Input]
+999983
+
+
+[Case Expect]
+999982
+
