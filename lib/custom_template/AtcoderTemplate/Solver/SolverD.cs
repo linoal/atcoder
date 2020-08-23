@@ -7,36 +7,89 @@ using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME
-{
-    class SolverD
-    {
-        static void Main()
-        {
+namespace PROJECT_NAME{
+    class SolverD{
+        static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             new SolverD().Solve();
             Out.Flush();
         }
 
-        public void Solve()
-        {
-            var n = Get.Int();
-            var a = new int[n];
-            foreach(var i in Range(0,n))
-            {
-                a[i] = Get.Int();
-            }
-            foreach(var i in a)
-            {
-                WriteLine(i);
+        public void Solve(){
+            checked{
+
+                var n = Get.Int();
+                var a = new int[n];
+                foreach(var i in Range(0,n)){
+                    a[i] = Get.Int();
+                }
+                foreach(var i in a){
+                    WriteLine(i);
+                }
+
+
             }
         }
 
 
 
+        static class Debug{
+            public static void Put(object obj, int padLeft = 0, bool newline = true){
 
-        private static class Get
-        {
+                if (obj is Array arr){
+                    if( arr.Rank == 1 ){
+                        Write("[");
+                        for(int i=0; i<arr.Length; i++){
+                            Put(arr.GetValue(i), padLeft, false);
+                            if( i < arr.Length - 1 ) Write(", ");
+                        }
+                        Write("]");
+                    }
+                    else if( arr.Rank == 2 ){
+                        Write("[\n");
+                        for(int i=0; i<arr.GetLength(0); i++){
+                            Write(" [");
+                            for(int j=0; j<arr.GetLength(1); j++){
+                                Put(arr.GetValue(i,j), padLeft, false);
+                                if (j < arr.GetLength(1) - 1) Write(", ");
+                            }
+                            if (i < arr.GetLength(0) - 1 ) Write("],\n");
+                            else Write("]\n");
+                        }
+                        Write("]");
+                    }
+                }
+                else if( obj is ValueType val ){
+                    Write(val.ToString().PadLeft(padLeft));
+                }
+                else if( obj is string str ){
+                    Write(str.PadLeft(padLeft));
+                }
+                else{
+                    Write(obj.ToString().PadLeft(padLeft));
+                }
+
+                if(newline) Write("\n");
+            }
+
+            public static void Put(object obj, string label, int padLeft = 0, bool newline = true){
+                Write("\u001b[32m{0}:\u001b[0m ", label);
+                Put(obj, padLeft, newline);
+            }
+            public static void Put(params object[] args){
+                if (args.Length % 2 != 0){
+                    WriteLine("Debug.Put(params): arg length shall be multiple of 2.");
+                }
+                for(int i=0; i<args.Length; i += 2){
+                    Put(args[i], (string)args[i+1],0, false);
+                    Write("   ");
+                }
+                Write("\n");
+            }
+        }
+
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());

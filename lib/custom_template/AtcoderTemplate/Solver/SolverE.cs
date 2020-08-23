@@ -7,68 +7,82 @@ using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME
-{
-    class SolverE
-    {
-        static void Main()
-        {
+namespace PROJECT_NAME{
+    class SolverE{
+        static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             new SolverE().Solve();
             Out.Flush();
         }
 
-        public void Solve()
-        {
-            var factors = Prime.PrimeFactorization(Get.Long());
-            long ans = 0;
-            foreach (var fact in factors)
-            {
-                // WriteLine($"{fact.prime}, {fact.exp}");
-                long exp = fact.exp;
-                int i = 1; int s = 0;
-                while(true)
-                {
-                    if( s + i <= exp )
-                    {
-                        s += i++;
-                        ans++;
-                    }else break;
-                }
+        public void Solve(){
+            checked{
+                
+
+
+
             }
-            WriteLine(ans);
-            
         }
 
-        static class Prime
-            {
-                // 約数は昇順になる
-                public static List<(long prime, long exp)> PrimeFactorization(long N)
-                {
-                    var primes = new List<(long prime, long exp)>();
-                    long n = N;
-                    for (long i=2; i * i < N; i++)
-                    {
-                        long exp = 0;
-                        while (n % i == 0)
-                        {
-                            n /= i;
-                            exp++;
+
+
+        static class Debug{
+            public static void Put(object obj, int padLeft = 0, bool newline = true){
+
+                if (obj is Array arr){
+                    if( arr.Rank == 1 ){
+                        Write("[");
+                        for(int i=0; i<arr.Length; i++){
+                            Put(arr.GetValue(i), padLeft, false);
+                            if( i < arr.Length - 1 ) Write(", ");
                         }
-                        if (exp > 0)
-                        {
-                            primes.Add((prime: i, exp: exp));
-                        }
+                        Write("]");
                     }
-                    if (n != 1) primes.Add((prime: n, exp: 1));
-                    return primes;
+                    else if( arr.Rank == 2 ){
+                        Write("[\n");
+                        for(int i=0; i<arr.GetLength(0); i++){
+                            Write(" [");
+                            for(int j=0; j<arr.GetLength(1); j++){
+                                Put(arr.GetValue(i,j), padLeft, false);
+                                if (j < arr.GetLength(1) - 1) Write(", ");
+                            }
+                            if (i < arr.GetLength(0) - 1 ) Write("],\n");
+                            else Write("]\n");
+                        }
+                        Write("]");
+                    }
                 }
+                else if( obj is ValueType val ){
+                    Write(val.ToString().PadLeft(padLeft));
+                }
+                else if( obj is string str ){
+                    Write(str.PadLeft(padLeft));
+                }
+                else{
+                    Write(obj.ToString().PadLeft(padLeft));
+                }
+
+                if(newline) Write("\n");
             }
 
+            public static void Put(object obj, string label, int padLeft = 0, bool newline = true){
+                Write("\u001b[32m{0}:\u001b[0m ", label);
+                Put(obj, padLeft, newline);
+            }
+            public static void Put(params object[] args){
+                if (args.Length % 2 != 0){
+                    WriteLine("Debug.Put(params): arg length shall be multiple of 2.");
+                }
+                for(int i=0; i<args.Length; i += 2){
+                    Put(args[i], (string)args[i+1],0, false);
+                    Write("   ");
+                }
+                Write("\n");
+            }
+        }
 
-
-        private static class Get
-        {
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());

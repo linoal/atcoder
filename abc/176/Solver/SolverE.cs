@@ -7,24 +7,73 @@ using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverA{
-        static void Main(){
+namespace abc176
+{
+    class SolverE
+    {
+        static void Main()
+        {
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverA().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
-        public void Solve(){
-            checked{
+        
+        long H,W,M;
+        long[] ht, wt;
 
-                var n = Get.Int();
-                WriteLine(n);
-            
+
+        public void Solve()
+        {
+            checked
+            {
+                // Debug.Put(2,2); Debug.Put('A',2); Debug.Put("strtest",2);
+                // Debug.Put(new int[]{1,2,3},2);
+                // Debug.Put(2,"num", new int[]{1,2,3}, "intarr");
+                // Debug.Put(new int[,]{{1,2,3},{4,5,6},{7,8,9}}, "2-dim array",2);
+                (H,W,M) = Get.Tuple<long,long,long>();
+                ht = new long[M]; wt = new long[M];
+                
+                for(int i=0; i<M; i++){
+                    (ht[i], wt[i]) = Get.Tuple<long,long>();
+                    ht[i]--; wt[i]--;
+                }
+
+                long[] hn = new long [H];
+                long[] wn = new long [W];
+                long maxHn=0, maxWn=0, hl=0, wl=0;
+                for(int m=0; m<M; m++){
+                    long h = ht[m]; long w = wt[m];
+                    hn[h]++; wn[w]++;
+                    if(maxHn < hn[h]){
+                        maxHn = hn[h];
+                        hl=1;
+                    }else if(maxHn == hn[h]){
+                        hl++;
+                    }
+                    if(maxWn < wn[w]){
+                        maxWn = wn[w];
+                        wl = 1;
+                    }else if(maxWn == wn[w]){
+                        wl++;
+                    }
+                }
+                long b=0;
+                for(int m=0; m<M; m++){
+                    if(hn[ht[m]] == maxHn && wn[wt[m]] == maxWn){
+                         b++;
+                    }
+                }
+                
+                long ans = maxHn + maxWn;
+                ans = b == hl * wl ? ans-1 : ans;
+
+                Debug.Put(hn,"hn",wn,"wn");
+                Debug.Put(hl,"hl",wl,"wl");
+                Debug.Put(new int[,]{{1,2,3},{4,5,6}}, "arr");
+                WriteLine(ans);
             }
         }
-
-
 
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
@@ -65,10 +114,13 @@ namespace PROJECT_NAME{
                 if(newline) Write("\n");
             }
 
+            // Put、ラベル付き版
             public static void Put(object obj, string label, int padLeft = 0, bool newline = true){
                 Write("\u001b[32m{0}:\u001b[0m ", label);
                 Put(obj, padLeft, newline);
             }
+
+            // Put、オブジェクトとラベルを複数渡す版
             public static void Put(params object[] args){
                 if (args.Length % 2 != 0){
                     WriteLine("Debug.Put(params): arg length shall be multiple of 2.");
@@ -82,7 +134,8 @@ namespace PROJECT_NAME{
         }
 
 
-        static class Get{
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -99,6 +152,6 @@ namespace PROJECT_NAME{
                                         : TypeConv<T, string>(s);
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
-        }  
+        }
     }
 }

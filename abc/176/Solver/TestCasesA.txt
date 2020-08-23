@@ -1,0 +1,23 @@
+// TEST CASE DSL
+
+// Command List: [Case Input],  [Case Output],
+//               [End],         // (Comment)
+//               [Rep n] (n=any number)
+
+
+[Case Input]
+20 12 6
+
+[Case Expect]
+12
+
+
+
+
+[Case Input]
+1000 1 1000
+
+[Case Expect]
+1000000
+
+
