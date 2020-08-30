@@ -18,32 +18,105 @@ namespace abc177{
 
         public void Solve(){
             checked{
-                BigInteger MOD = 46116646144580591;
-                int N = Get.Int();
-                ulong[] A = Get.Longs().Select(x => (ulong)x).ToArray();
-                // BigInteger mul = 1;
-                BigInteger lcm = 1;
-                BigInteger gcd = A[0];
-                bool isPairwise = true;
+                // BigInteger MOD = 46116646144580591;
+                // int N = Get.Int();
+                // ulong[] A = Get.Longs().Select(x => (ulong)x).ToArray();
+                // // BigInteger mul = 1;
+                // BigInteger lcm = 1;
+                // BigInteger gcd = A[0];
+                // bool isPairwise = true;
+                // for(int i=0; i<N; i++){
+                //     // mul *= A[i];
+                //     BigInteger tmpLcm = lcm;
+                //     lcm = Lcm(lcm, A[i]) % MOD;
+                //     if( tmpLcm * A[i] % MOD != lcm && gcd != 1){
+                //         isPairwise = false;
+                //     }
+                //     gcd = Gcd(gcd, A[i]);
+                // }
+                // if( isPairwise ){
+                //     WriteLine("pairwise coprime");
+                // }else if (gcd == 1){
+                //     WriteLine("setwise coprime");
+                // }else{
+                //     WriteLine("not coprime");
+                // }
+                var N = Get.Int();
+                var A = Get.Ints();
+
+                var fpf = new FasterPrimeFactorization(A.Max());
+                Dictionary<int,int> dic = new Dictionary<int, int>();
                 for(int i=0; i<N; i++){
-                    // mul *= A[i];
-                    BigInteger tmpLcm = lcm;
-                    lcm = Lcm(lcm, A[i]) % MOD;
-                    if( tmpLcm * A[i] % MOD != lcm && gcd != 1){
-                        isPairwise = false;
+                    var factList = fpf.Factorization(A[i]);
+                    for(int j=0; j<factList.Count; j++){
+                        var fact = factList[j];
+                        var prime = fact.prime;
+                        // var exp = fact.exp;
+                        if (dic.ContainsKey(prime)){
+                            dic[prime] += 1;
+                        }else{
+                            dic.Add(prime, 1);
+                        }
                     }
-                    gcd = Gcd(gcd, A[i]);
                 }
-                if( isPairwise ){
+
+                bool isPairwise = true;
+                bool isCoprime = true;
+
+                foreach(var d in dic){
+                    // Debug.Put(d.Key,"prime",d.Value,"num");
+                    if(d.Value > 1) isPairwise = false;
+                    if(d.Value == N) isCoprime = false;
+                }
+                if(isPairwise){
                     WriteLine("pairwise coprime");
-                }else if (gcd == 1){
-                    WriteLine("setwise coprime");
-                }else{
+                }else if(!isCoprime){
                     WriteLine("not coprime");
+                }else{
+                    WriteLine("setwise coprime");
                 }
 
+            }
+        }
 
+        // 高速素因数分解。
+        // 下処理が O(AloglogA)、素因数分解が O(logA) (A = 素因数分解したい数のうち最大の数)
+        class FasterPrimeFactorization{
+            int[] spf; // smallest prime factorsのテーブル
 
+            // 下処理でspfテーブルを作る。引数は素因数分解したい A_1 ～ A_N の最大値 aMax。
+            public FasterPrimeFactorization(int aMax){
+                spf = new int[aMax+1];
+                for(int i=0; i<spf.Length; i++){
+                    spf[i] = i;
+                }
+
+                for(int i=2; i*i <= aMax; i++){
+                    if (spf[i] == i){
+                        for(int j = i*i; j <= aMax; j += i){
+                            if (spf[j] == j){
+                                spf[j] = i;
+                            }
+                        }
+                    }
+                }
+                // Debug.Put(spf,"spf");
+            }
+
+            // 引数 a を素因数分解する。戻り値は List<(素数, 指数)> の形式。
+            public List<(int prime, int exp)> Factorization(int a){
+                var primes = new List<(int prime, int exp)>();
+                while (a != 1){
+                    int prime = spf[a];
+                    int exp = 0;
+                    while (spf[a] == prime){
+                        exp++;
+                        a /= prime;
+                    }
+                    primes.Add((prime: prime, exp: exp));
+                    // Debug.Put(prime,"prime", exp,"exp");
+                }
+                return primes;
             }
         }
 
@@ -59,6 +132,24 @@ namespace abc177{
             }
             if(n==0) return m;
             return Gcd(n, m%n); 
+        }
+
+
+        static class Mod{
+            public static long Pow(long x, long e, long mod = long.MaxValue){
+                long res = 1;
+                while (e > 0){
+                    if ((e & 1) == 1) res = res * x % mod;
+                    x = x * x % mod;
+                    e >>= 1;
+                }
+                return res;
+            }
+
+            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
+            public static long Inv(long a, long mod){
+                return Pow(a, mod-2, mod);
+            }
         }
 
         static class Debug{
