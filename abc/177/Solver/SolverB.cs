@@ -7,48 +7,38 @@ using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverC{
+namespace abc177{
+    class SolverB{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverC().Solve();
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                (var N, var K) = Get.Tuple<int,int>();
+                char[] S = Get.Str().ToCharArray();
+                char[] T = Get.Str().ToCharArray();
 
-                int[] A = Get.Ints();
-                for (int i=K; i<N; i++){
-                    WriteLine(A[i-K] < A[i] ? "Yes" : "No");
+                int ls = S.Length;
+                int lt = T.Length;
+                int ans = int.MaxValue;
+                for(int i=0; i<ls-(lt-1); i++){
+                    int dif = 0;
+                    for(int j=0; j<lt; j++){
+                        if(S[i+j] != T[j]){
+                            dif++;
+                        }
+                    }
+                    ans = Min(ans,dif);
                 }
-
-                
+                WriteLine(ans);
             }
         }
 
 
 
-
-        static class Mod{
-            public static long Pow(long x, long e, long mod = long.MaxValue){
-                long res = 1;
-                while (e > 0){
-                    if ((e & 1) == 1) res = res * x % mod;
-                    x = x * x % mod;
-                    e >>= 1;
-                }
-                return res;
-            }
-
-            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
-            public static long Inv(long a, long mod){
-                return Pow(a, mod-2, mod);
-            }
-        }
-        
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -104,9 +94,7 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get
-        {
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());

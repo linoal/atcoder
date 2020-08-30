@@ -7,48 +7,100 @@ using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverC{
+namespace abc177{
+    class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverC().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                (var N, var K) = Get.Tuple<int,int>();
-
-                int[] A = Get.Ints();
-                for (int i=K; i<N; i++){
-                    WriteLine(A[i-K] < A[i] ? "Yes" : "No");
+                (int N, int M) = Get.Tuple<int,int>();
+                UnionFind uf = new UnionFind(N);
+                for(int i=0; i<M; i++){
+                    (int a, int b) = Get.Tuple<int,int>();
+                    a--; b--;
+                    uf.Union(a,b);
                 }
+                int max=0;
+                for(int i=0; i<N; i++){
+                    max = Max(uf.Size(i), max);
+                }
+                WriteLine(max);
 
-                
             }
         }
 
 
-
-
-        static class Mod{
-            public static long Pow(long x, long e, long mod = long.MaxValue){
-                long res = 1;
-                while (e > 0){
-                    if ((e & 1) == 1) res = res * x % mod;
-                    x = x * x % mod;
-                    e >>= 1;
-                }
-                return res;
-            }
-
-            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
-            public static long Inv(long a, long mod){
-                return Pow(a, mod-2, mod);
-            }
+        class UnionFind
+{
+    // 親要素のインデックスを保持する
+    // 親要素が存在しない(自身がルートである)とき、マイナスでグループの要素数を持つ
+    public int[] Parents { get; set; }
+    public UnionFind(int n)
+    {
+        this.Parents = new int[n];
+        for (int i = 0; i < n; i++)
+        {
+            // 初期状態ではそれぞれが別のグループ(ルートは自分自身)
+            // ルートなのでマイナスで要素数(1個)を保持する
+            this.Parents[i] = -1;
         }
-        
+    }
+
+    // 要素xのルート要素はどれか
+    public int Find(int x)
+    {
+        // 親がマイナスの場合は自分自身がルート
+        if (this.Parents[x] < 0) return x;
+        // ルートが見つかるまで再帰的に探す
+        // 見つかったルートにつなぎかえる
+        this.Parents[x] = Find(this.Parents[x]);
+        return this.Parents[x];
+    }
+
+    // 要素xの属するグループの要素数を取得する
+    public int Size(int x)
+    {
+        // ルート要素を取得して、サイズを取得して返す
+        return -this.Parents[this.Find(x)];
+    }
+
+    // 要素x, yが同じグループかどうか判定する
+    public bool Same(int x, int y)
+    {
+        return this.Find(x) == this.Find(y);
+    }
+
+    // 要素x, yが属するグループを同じグループにまとめる
+    public bool Union(int x, int y)
+    {
+        // x, y のルート
+        x = this.Find(x);
+        y = this.Find(y);
+        // すでに同じグループの場合処理しない
+        if (x == y) return false;
+
+        // 要素数が少ないグループを多いほうに書き換えたい
+        if (this.Size(x) < this.Size(y))
+        {
+            var tmp = x;
+            x = y;
+            y = tmp;
+        }
+        // まとめる先のグループの要素数を更新
+        this.Parents[x] += this.Parents[y];
+        // まとめられるグループのルートの親を書き換え
+        this.Parents[y] = x;
+        return true;
+    }
+}
+
+
+
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -105,8 +157,7 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get
-        {
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());

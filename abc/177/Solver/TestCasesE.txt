@@ -1,0 +1,31 @@
+[Case Input]
+3
+3 4 5
+
+[Case Expect]
+pairwise coprime
+
+
+
+
+
+[Case Input]
+3
+6 10 15
+
+[Case Expect]
+setwise coprime
+
+
+
+
+[Case Input]
+3
+6 10 16
+
+[Case Expect]
+not coprime
+
+
+
+

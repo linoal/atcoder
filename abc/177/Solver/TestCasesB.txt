@@ -1,0 +1,20 @@
+[Case Input]
+cabacc
+abc
+[Case Expect]
+1
+
+
+
+
+[Case Input]
+codeforces
+atcoder
+[Case Expect]
+6
+
+[Case Input]
+aaaab
+b
+[Case Expect]
+0

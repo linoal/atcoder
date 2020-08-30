@@ -1,0 +1,19 @@
+[Case Input]
+3
+1 2 3
+
+[Case Expect]
+11
+
+
+
+
+
+[Case Input]
+4
+141421356 17320508 22360679 244949
+
+[Case Expect]
+437235829
+
+

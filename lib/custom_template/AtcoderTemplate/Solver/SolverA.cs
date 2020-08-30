@@ -26,6 +26,23 @@ namespace PROJECT_NAME{
 
 
 
+        static class Mod{
+            public static long Pow(long x, long e, long mod = long.MaxValue){
+                long res = 1;
+                while (e > 0){
+                    if ((e & 1) == 1) res = res * x % mod;
+                    x = x * x % mod;
+                    e >>= 1;
+                }
+                return res;
+            }
+
+            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
+            public static long Inv(long a, long mod){
+                return Pow(a, mod-2, mod);
+            }
+        }
+
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 

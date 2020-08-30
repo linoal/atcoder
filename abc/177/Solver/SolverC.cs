@@ -7,7 +7,7 @@ using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace abc177{
     class SolverC{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
@@ -17,19 +17,42 @@ namespace PROJECT_NAME{
 
         public void Solve(){
             checked{
+                long MOD = Mod.Pow(10,9)+7;
 
-                (var N, var K) = Get.Tuple<int,int>();
+                int N = Get.Int();
+                long[] A = Get.Longs();
+                // long[] S = new long[N];
+                // long sum=0;
+                // for(int i=N-1; i>=0; i--){
+                //     S[i] = sum;
+                //     sum += A[i];
+                //     sum %= MOD;
+                    
+                // }
+                // long ans=0;
+                // for(int i=0; i<N; i++){
+                //     ans += A[i]*S[i];
+                //     ans %= MOD;
+                // }
+                // WriteLine(ans);
 
-                int[] A = Get.Ints();
-                for (int i=K; i<N; i++){
-                    WriteLine(A[i-K] < A[i] ? "Yes" : "No");
+                long sum = 0;
+                for(int i=0; i<N; i++){
+                    sum += A[i];
+                    sum %= MOD;
                 }
-
-                
+                // Debug.Put(sum,"sum");
+                long area = sum * sum % MOD;
+                for(int i=0; i<N; i++){
+                    area -= A[i]*A[i] % MOD;
+                    if(area<0) area+=MOD;
+                }
+                // Debug.Put(area,"area");
+                // Debug.Put(Mod.Inv(2,MOD),"2の逆元:");
+                area = area * Mod.Inv(2,MOD) % MOD;
+                WriteLine(area);
             }
         }
-
-
 
 
         static class Mod{
@@ -49,6 +72,7 @@ namespace PROJECT_NAME{
             }
         }
         
+
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 

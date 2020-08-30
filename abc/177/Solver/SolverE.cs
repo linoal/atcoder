@@ -6,49 +6,61 @@ using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
+using System.Numerics;
 
-namespace PROJECT_NAME{
-    class SolverC{
+namespace abc177{
+    class SolverE{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverC().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-
-                (var N, var K) = Get.Tuple<int,int>();
-
-                int[] A = Get.Ints();
-                for (int i=K; i<N; i++){
-                    WriteLine(A[i-K] < A[i] ? "Yes" : "No");
+                BigInteger MOD = 46116646144580591;
+                int N = Get.Int();
+                ulong[] A = Get.Longs().Select(x => (ulong)x).ToArray();
+                // BigInteger mul = 1;
+                BigInteger lcm = 1;
+                BigInteger gcd = A[0];
+                bool isPairwise = true;
+                for(int i=0; i<N; i++){
+                    // mul *= A[i];
+                    BigInteger tmpLcm = lcm;
+                    lcm = Lcm(lcm, A[i]) % MOD;
+                    if( tmpLcm * A[i] % MOD != lcm && gcd != 1){
+                        isPairwise = false;
+                    }
+                    gcd = Gcd(gcd, A[i]);
+                }
+                if( isPairwise ){
+                    WriteLine("pairwise coprime");
+                }else if (gcd == 1){
+                    WriteLine("setwise coprime");
+                }else{
+                    WriteLine("not coprime");
                 }
 
-                
+
+
             }
         }
 
-
-
-
-        static class Mod{
-            public static long Pow(long x, long e, long mod = long.MaxValue){
-                long res = 1;
-                while (e > 0){
-                    if ((e & 1) == 1) res = res * x % mod;
-                    x = x * x % mod;
-                    e >>= 1;
-                }
-                return res;
-            }
-
-            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
-            public static long Inv(long a, long mod){
-                return Pow(a, mod-2, mod);
-            }
+        BigInteger Lcm(BigInteger a, BigInteger b){
+            return a / Gcd(a,b) * b;
         }
-        
+
+        BigInteger Gcd(BigInteger m, BigInteger n){
+            if(m<n){
+                BigInteger tmp = n;
+                n = m;
+                m = tmp;
+            }
+            if(n==0) return m;
+            return Gcd(n, m%n); 
+        }
+
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -105,8 +117,7 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get
-        {
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
