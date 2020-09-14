@@ -1,0 +1,19 @@
+[Case Input]
+1 2 1 1
+[Case Expect]
+2
+
+
+
+
+[Case Input]
+3 5 -4 -2
+[Case Expect]
+-6
+
+
+[Case Input]
+-1000000000 0 -1000000000 0
+[Case Expect]
+1000000000000000000
+

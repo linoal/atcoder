@@ -1,0 +1,25 @@
+[Case Input]
+7
+[Case Expect]
+3
+
+
+
+
+[Case Input]
+2
+[Case Expect]
+0
+
+[Case Input]
+1
+[Case Expect]
+0
+
+
+
+[Case Input]
+1729
+
+[Case Expect]
+294867501

@@ -6,95 +6,28 @@ using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
-using System.Numerics;
 
-namespace abc177{
-    class SolverE{
+namespace ABC178{
+    class SolverB{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-                var N = Get.Int();
-                var A = Get.Ints();
 
-                var fpf = new FasterPrimeFactorization(A.Max());
-                Dictionary<int,int> dic = new Dictionary<int, int>();
-                for(int i=0; i<N; i++){
-                    var factList = fpf.Factorization(A[i]);
-                    for(int j=0; j<factList.Count; j++){
-                        var fact = factList[j];
-                        var prime = fact.prime;
-                        // var exp = fact.exp;
-                        if (dic.ContainsKey(prime)){
-                            dic[prime] += 1;
-                        }else{
-                            dic.Add(prime, 1);
-                        }
-                    }
-                }
-
-                bool isPairwise = true;
-                bool isCoprime = true;
-
-                foreach(var d in dic){
-                    if(d.Value > 1) isPairwise = false;
-                    if(d.Value == N) isCoprime = false;
-                }
-                if(isPairwise){
-                    WriteLine("pairwise coprime");
-                }else if(!isCoprime){
-                    WriteLine("not coprime");
-                }else{
-                    WriteLine("setwise coprime");
-                }
-
+                var ins = Get.Longs();
+                var max = long.MinValue;
+                max = Max(max, ins[0]*ins[2]);
+                max = Max(max, ins[0]*ins[3]);
+                max = Max(max, ins[1]*ins[2]);
+                max = Max(max, ins[1]*ins[3]);
+                WriteLine(max);
             }
         }
 
-        // 高速素因数分解。
-        // 下処理が O(AloglogA)、素因数分解が O(logA) (A = 素因数分解したい数のうち最大の数)
-        class FasterPrimeFactorization{
-            int[] spf; // smallest prime factorsのテーブル
-
-            // 下処理でspfテーブルを作る。引数は素因数分解したい A_1 ～ A_N の最大値 aMax。
-            public FasterPrimeFactorization(int aMax){
-                spf = new int[aMax+1];
-                for(int i=0; i<spf.Length; i++){
-                    spf[i] = i;
-                }
-
-                for(int i=2; i*i <= aMax; i++){
-                    if (spf[i] == i){
-                        for(int j = i*i; j <= aMax; j += i){
-                            if (spf[j] == j){
-                                spf[j] = i;
-                            }
-                        }
-                    }
-                }
-                // Debug.Put(spf,"spf");
-            }
-
-            // 引数 a を素因数分解する。戻り値は List<(素数, 指数)> の形式。
-            public List<(int prime, int exp)> Factorization(int a){
-                var primes = new List<(int prime, int exp)>();
-                while (a != 1){
-                    int prime = spf[a];
-                    int exp = 0;
-                    while (spf[a] == prime){
-                        exp++;
-                        a /= prime;
-                    }
-                    primes.Add((prime: prime, exp: exp));
-                    // Debug.Put(prime,"prime", exp,"exp");
-                }
-                return primes;
-            }
-        }
 
 
         static class Mod{
@@ -108,12 +41,12 @@ namespace abc177{
                 return res;
             }
 
-            // 逆元を求める。（前提：modが素数、aがpの倍数でない。）フェルマーの小定理に基づく。
+            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
             public static long Inv(long a, long mod){
                 return Pow(a, mod-2, mod);
             }
         }
-
+        
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -169,8 +102,7 @@ namespace abc177{
             }
         }
 
-        
-        private static class Get{
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());

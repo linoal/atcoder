@@ -6,95 +6,130 @@ using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
-using System.Numerics;
 
-namespace abc177{
-    class SolverE{
+namespace ABC178{
+    class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
+        long[] dp;
+        long m = Mod.Pow(10,9)+7;
+
         public void Solve(){
             checked{
-                var N = Get.Int();
-                var A = Get.Ints();
 
-                var fpf = new FasterPrimeFactorization(A.Max());
-                Dictionary<int,int> dic = new Dictionary<int, int>();
-                for(int i=0; i<N; i++){
-                    var factList = fpf.Factorization(A[i]);
-                    for(int j=0; j<factList.Count; j++){
-                        var fact = factList[j];
-                        var prime = fact.prime;
-                        // var exp = fact.exp;
-                        if (dic.ContainsKey(prime)){
-                            dic[prime] += 1;
-                        }else{
-                            dic.Add(prime, 1);
-                        }
-                    }
-                }
 
-                bool isPairwise = true;
-                bool isCoprime = true;
+                long S = Get.Int();
+                long ans = 0;
+                var comb = new Combination(S,m);
+                for(int n=1; 3*n<=S; n++){
+                    ans += comb.Get(S-2*n-1, n-1);
+                    ans %= m;
+                }
+                WriteLine(ans);
 
-                foreach(var d in dic){
-                    if(d.Value > 1) isPairwise = false;
-                    if(d.Value == N) isCoprime = false;
-                }
-                if(isPairwise){
-                    WriteLine("pairwise coprime");
-                }else if(!isCoprime){
-                    WriteLine("not coprime");
-                }else{
-                    WriteLine("setwise coprime");
-                }
+                // long S = Get.Int();
+                // if(S<3){
+                //     WriteLine(0);
+                //     return;
+                // }
+                // dp = new long[S+1];
+                // dp[0]=1; dp[1]=0; dp[2]=0;
+                // for(int i=3; i<=S; i++){
+                //     dp[i] = dp[i-1] + dp[i-3];
+                //     dp[i] %= m;
+                // }
+                // WriteLine(dp[S]%m);
+
+                // long S = Get.Int();
+
+                // dp = new long[S+2, S/3 + 2];
+                // for(int i=0; i<dp.GetLength(0); i++){
+                //     for(int j=0; j<dp.GetLength(1); j++){
+                //         if(i<3) dp[i,j] = 0;
+                //         else if(j==1) dp[i,j] = 1;
+                //         else dp[i,j] = -1;
+                //     }
+                // }
+
+                
+                // long ans = 0;
+                // for(int i=1; i<=S/3+1; i++){
+                //     var cal = Calc(S,i);
+                //     //Debug.Put(cal, $"Calc({S},{i}) = ");
+                //     ans += cal;
+                //     ans %= m;
+                // }
+                // WriteLine(ans % m);
 
             }
         }
 
-        // 高速素因数分解。
-        // 下処理が O(AloglogA)、素因数分解が O(logA) (A = 素因数分解したい数のうち最大の数)
-        class FasterPrimeFactorization{
-            int[] spf; // smallest prime factorsのテーブル
+        public class Combination{
+            long[][] pascal;
 
-            // 下処理でspfテーブルを作る。引数は素因数分解したい A_1 ～ A_N の最大値 aMax。
-            public FasterPrimeFactorization(int aMax){
-                spf = new int[aMax+1];
-                for(int i=0; i<spf.Length; i++){
-                    spf[i] = i;
+            // nCk に関するdpテーブル(要素数 n*n/2)を作成する。O(n^2)。
+            public Combination(long n, long mod = long.MaxValue){
+                pascal = new long[n+1][];
+                for(int i=0; i<n+1; i++){
+                    pascal[i] = new long[i+1];
+                    pascal[i][0] = 1;
+                    pascal[i][i] = 1;
                 }
-
-                for(int i=2; i*i <= aMax; i++){
-                    if (spf[i] == i){
-                        for(int j = i*i; j <= aMax; j += i){
-                            if (spf[j] == j){
-                                spf[j] = i;
-                            }
-                        }
+                for(int i=2; i<n+1; i++){
+                    for(int j=1; j<i; j++){
+                        // ここで左右対称を利用すると、実行時間が半分になるが未実装。
+                        pascal[i][j] = ( pascal[i-1][j-1] + pascal[i-1][j] ) % mod;
                     }
                 }
-                // Debug.Put(spf,"spf");
             }
 
-            // 引数 a を素因数分解する。戻り値は List<(素数, 指数)> の形式。
-            public List<(int prime, int exp)> Factorization(int a){
-                var primes = new List<(int prime, int exp)>();
-                while (a != 1){
-                    int prime = spf[a];
-                    int exp = 0;
-                    while (spf[a] == prime){
-                        exp++;
-                        a /= prime;
+            // nCk をdpテーブルから取得する。O(1)。
+            public long Get(long n, long k){
+                return pascal[n][k];
+            }
+
+            // pascal dpテーブルを表示
+            public void DebugPrint(){
+                for(int i=0; i<pascal.Length; i++){
+                    for(int j=0; j<pascal[i].Length; j++){
+                        Console.Write($"{pascal[i][j]} ");
                     }
-                    primes.Add((prime: prime, exp: exp));
-                    // Debug.Put(prime,"prime", exp,"exp");
+                    Console.Write("\n");
                 }
-                return primes;
             }
         }
+
+        // public long Calc(long s, long n){
+            
+        //     if( n*3 > s ) return 0;
+        //     if( dp[s,n] != -1 ) {
+        //         //Debug.Put("dp hit");
+        //         return dp[s,n];
+        //         }
+        //     if( n == 1 ) return 1;
+        //     if( n== 2) return s-5;
+        //     if(n==3){
+        //         var cal = 0;
+        //         for(int i=3; i<=n-3; i++){
+        //             cal += i-5;
+        //         }
+        //         dp[s,n] = cal % m;
+        //         return cal % m;
+        //     }
+        //     long ret = 0;
+        //     for(int i=3; i <= s-3; i++){
+        //         ret += Calc(s-i, n-1);
+        //         ret %= m;
+        //     }
+        //     dp[s,n] = ret % m;
+        //     //Debug.Put(dp); Debug.Put(dp[s,n], $"dp[{s},{n}]");// ReadLine();
+        //     return ret % m;
+        // }
+
 
 
         static class Mod{
@@ -108,12 +143,12 @@ namespace abc177{
                 return res;
             }
 
-            // 逆元を求める。（前提：modが素数、aがpの倍数でない。）フェルマーの小定理に基づく。
+            // 逆元を求める。前提：modが素数、aがpの倍数でない。フェルマーの小定理に基づく。
             public static long Inv(long a, long mod){
                 return Pow(a, mod-2, mod);
             }
         }
-
+        
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 

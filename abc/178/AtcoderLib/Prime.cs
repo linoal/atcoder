@@ -49,6 +49,7 @@ namespace AtcoderLib
                 return primes;
             }
         }
+        // FasterPrimeFactorization ここまで
 
         static long Lcm(long a, long b){
             return a / Gcd(a,b) * b;
