@@ -17,56 +17,84 @@ namespace ACLB{
 
         public void Solve(){
             checked{
+                int JMAX = 300000;
 
                 (int N, int K) = Get.Tuple<int,int>();
-                // Dictionary<int,int> dic = new Dictionary<int, int>(400000);
-                // for(int i=0; i<N; i++){
-                //     int a = Get.Int();
-                //     int longest = -1;
-                //     for(int j=-3; j<=3; j++){
-                //         if(dic.ContainsKey(a+j)){
-                //             longest = Max(longest, dic[a+j]);
-                //         }
-                //     }
-                //     for(int j=-3; j<=3; j++){
-                //         if(dic.ContainsKey(a+j)){
-                //             if(dic[a+j] != longest){
-                //                 dic.Remove(a+j);
-                //             }else{
-
-                //             }
-                //         }
-                //     }
-                // }
-
-
-
-
-            }
-        }
-
-        public class Line : IComparable<Line>{
-            public int last;
-            public int length;
-            Line(int x){
-                last = x;
-                length = 1;
-            }
-
-            public int CompareTo(Line line){
-                return this.last.CompareTo(line.last);
-            }
-        }
-
-        public class Graph{
-            SortedSet<Line> lines = new SortedSet<Line>();
-            
-            public void add(int x){
-                for(int i=-3; i<=3; i++){
-                    
+                var A = new int[N];
+                for(int i=0; i<N; i++){
+                    A[i] = Get.Int();
                 }
+                var initjs = Repeat<long>(0,JMAX+1).ToArray();
+                var seg = new SegmentTree<long>(initjs, (x,y)=>Max(x,y), 0);
+                for(int i=0; i<N; i++){
+                    var rnmax = seg.Execute((int)Max(0,A[i]-K),(int)Max(K,A[i]+K+1));
+                    seg.Update(A[i],rnmax+1);
+                }
+                long max = 0;
+                for(int j=0; j<JMAX; j++){
+                    max = Max(max, seg.Execute(j,j+1));
+                }
+                WriteLine(max);
+
+
             }
         }
+
+       public class SegmentTree<T>{
+
+        public int N { get; private set; }
+        private T[] tree;
+        private readonly Func<T,T,T> updateMethod;
+        private readonly T initValue;
+
+        // セグメント木の初期化
+        // arg: 要素の配列, 更新する方法(x,y)=>val(minとかsumとか), ノードの初期値
+        public SegmentTree(IEnumerable<T> items, Func<T,T,T> _updateMethod, T _initValue){
+            T[] array = items.ToArray();
+            updateMethod = _updateMethod;
+            initValue = _initValue;
+
+            // セグ木の最下段は2のべき乗にする
+            N = 1;
+            while (N < array.Length) N *= 2;
+            tree = Enumerable.Repeat(initValue, 2 * N - 1).ToArray();
+
+            // 最下段に要素配列を入れたあと、下の段から更新する
+            for (int i = 0; i < array.Length; i++) tree[N + i - 1] = array[i];
+            for (int i = N - 2; i >= 0; i--) tree[i] = updateMethod(tree[2 * i + 1], tree[2 * i + 2]);
+        }
+
+        // 更新する
+        // arg: 更新したい値のインデックス、更新する値
+        public void Update(int index, T val){
+            int i = N + index - 1; // 更新したい要素のセグ木上のインデックスを取得
+            // 値を更新したあとに、次々に親を更新していく
+            tree[i] = val;
+            while(i > 0){
+                i = (i - 1) / 2;
+                tree[i] = updateMethod(tree[2 * i + 1], tree[2 * i + 2]);
+            }
+        }
+
+        // 区間内の目的の値を取得する。区間 [a,b) bは開区間であることに注意。
+        public T Execute(int a, int b) => Execute(a, b, 0, 0, N);
+
+        private T Execute(int a, int b, int k, int l, int r){
+            // 要求区間 [a,b) に対して対象区間 [l,r)を求める。
+            // 今いるノードのインデックスがk
+
+            // 要求区間と対象区間が交わらない
+            if(r <= a || b <= l) return initValue;
+            // 要求区間が対象区間を完全に被覆
+            if(a <= l && r <= b) return tree[k];
+
+            // 要求区間が対象区間の一部を被覆しているので、子について探索する
+            // 新しい対象区間は、現在の対象区間を半分に割ったもの
+            var vl = Execute(a, b, 2 * k + 1, l, (l + r) / 2);
+            var vr = Execute(a, b, 2 * k + 2, (l + r) / 2, r);
+            return updateMethod(vl, vr);
+        }
+    } // class SegmentTree ここまで
 
 
 

@@ -96,5 +96,5 @@ namespace AtcoderLib{
             offset = 0;
             capacity <<= 1;
         }
-    }
+    } // class Deque ここまで
 }

@@ -25,7 +25,7 @@ namespace PROJECT_NAME{
         }
 
 
-
+        // === ここからライブラリ
         static class Mod{
             public static long Pow(long x, long e, long mod = long.MaxValue){
                 long res = 1;
@@ -116,6 +116,7 @@ namespace PROJECT_NAME{
                                         : TypeConv<T, string>(s);
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
+            public static (T,U,V,W) Tuple<T,U,V,W>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); W w = TypeConv<W>(strs[3]); return(t,u,v,w);}
         }
     }
 }

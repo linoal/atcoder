@@ -55,5 +55,5 @@ namespace AtcoderLib{
             return true;
         }
         
-    }
+    } // class UnionFind ここまで
 }

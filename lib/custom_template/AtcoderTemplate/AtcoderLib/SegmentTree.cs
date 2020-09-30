@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace AtcoderLib{
-// 参考サイト： https://www.hanachiru-blog.com/entry/2020/06/19/141057
 
 
+    // 参考サイト： https://www.hanachiru-blog.com/entry/2020/06/19/141057
     public class SegmentTree<T>{
 
         public int N { get; private set; }
@@ -60,5 +60,5 @@ namespace AtcoderLib{
             var vr = Execute(a, b, 2 * k + 2, (l + r) / 2, r);
             return updateMethod(vl, vr);
         }
-    }
+    } // class SegmentTree ここまで
 }
