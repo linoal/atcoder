@@ -1,0 +1,30 @@
+[Case Input]
+24
+
+[Case Expect]
+3
+
+
+
+
+[Case Input]
+1
+
+[Case Expect]
+0
+
+
+
+[Case Input]
+64
+
+[Case Expect]
+3
+
+
+
+[Case Input]
+1000000007
+
+[Case Expect]
+1
