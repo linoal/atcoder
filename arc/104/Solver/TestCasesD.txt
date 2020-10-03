@@ -1,0 +1,26 @@
+[Case Input]
+1
+100
+[Case Expect]
+100
+
+
+
+[Case Input]
+5
+777
+[Rep 5]
+[Case Expect]
+777
+[Rep 5]
+
+
+
+[Case Input]
+1000
+123456789
+[Rep 1000]
+
+[Case Expect]
+123456789
+[Rep 1000]

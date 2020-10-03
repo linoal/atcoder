@@ -1,0 +1,19 @@
+[Case Input]
+4 AGCT
+[Case Expect]
+2
+
+
+
+
+[Case Input]
+4 ATAT
+[Case Expect]
+4
+
+
+[Case Input]
+10 AAATACCGCG
+[Case Expect]
+6
+
