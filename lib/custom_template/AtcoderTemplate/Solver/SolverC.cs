@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using PROJECT_NAME.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
@@ -124,6 +125,30 @@ namespace PROJECT_NAME{
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
             public static (T,U,V,W) Tuple<T,U,V,W>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); W w = TypeConv<W>(strs[3]); return(t,u,v,w);}
+            public static T[] Lines<T>(int N){
+                T[] ret = new T[N];
+                for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
+                return ret;
+            }
+        }
+    }
+     // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
+    namespace SolverCExtensions{
+        static class ArrayExtensions{
+            public static T[] Fill<T>(this T[] arr, T val){
+                for(int i=0; i<arr.Length; i++){
+                    arr[i] = val;
+                }
+                return arr;
+            }
+            public static T[,] Fill<T>(this T[,] arr, T val ){
+                for(int i=0; i<arr.GetLength(0); i++){
+                    for(int j=0; j<arr.GetLength(1); j++){
+                        arr[i,j] = val;
+                    }
+                }
+                return arr;
+            }
         }
     }
 }

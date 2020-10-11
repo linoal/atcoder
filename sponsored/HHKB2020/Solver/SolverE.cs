@@ -2,26 +2,103 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverAExtensions;
+using HHKB2020.SolverEExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverA{
+namespace HHKB2020{
+    class SolverE{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverA().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                long m = 1_000_000_007;
+                
+                (int H, int W) = Get.Tuple<int,int>();
+                string[] S = Get.Lines<string>(H);
 
-                var n = Get.Int();
-                WriteLine(n);
-            
+                long K = 0;
+                for(int i=0; i<H; i++){
+                    for(int j=0; j<W; j++){
+                        if(S[i][j]=='.') K++;
+                    }
+                }
+
+                int[,] lh = new int[H,W].Fill(-1);
+                // Debug.Put(lv,"lv");
+                for(int i=0; i<H; i++){
+                    int seq = 0;
+                    for(int j=0; j<W; j++){
+                        if(S[i][j] == '#'){
+                            seq = 0;
+                        }else{
+                            lh[i,j] = seq;
+                            seq++;
+                        }
+                    }
+                }
+                // Debug.Put(lh,"lh");
+                for(int i=H-1; i>=0; i--){
+                    int num = -1;
+                    for(int j=W-1; j>=0; j--){
+                        if(lh[i,j]==-1){
+                            num = -1;
+                        }else{
+                            num = Max(num, lh[i,j]);
+                            lh[i,j] = num;
+                        }
+                    }
+                }
+                // Debug.Put(lh,"lh");
+
+                
+                int[,] lv = new int[H,W].Fill(-1);
+                for(int i=0; i<W; i++){
+                    int seq = 0;
+                    for(int j=0; j<H; j++){
+                        if(S[j][i] == '#'){
+                            seq = 0;
+                        }else{
+                            lv[j,i] = seq;
+                            seq++;
+                        }
+                    }
+                }
+                // Debug.Put(lv,"lv");
+                for(int i=W-1; i>=0; i--){
+                    int num = -1;
+                    for(int j=H-1; j>=0; j--){
+                        if(lv[j,i]==-1){
+                            num = -1;
+                        }else{
+                            num = Max(num, lv[j,i]);
+                            lv[j,i] = num;
+                        }
+                    }
+                }
+                // Debug.Put(lv,"lv");
+                long ans = 0;
+                long pow2K = Mod.Pow(2, K, m);
+
+                for(int h=0; h<H; h++){
+                    for(int w=0; w<W; w++){
+                        if(S[h][w]=='#') continue;
+                        long mas = pow2K;
+                        long lm = lh[h,w] + lv[h,w] + 1;
+                        mas -= Mod.Pow(2, K - lm, m);
+                        ans += mas % m;
+                        ans %= m;
+                        if(ans<0) ans+=m;
+                    }
+                }
+
+                WriteLine(ans%m);
             }
         }
 
@@ -43,7 +120,7 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-
+        
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -99,8 +176,8 @@ namespace PROJECT_NAME{
             }
         }
 
-
-        static class Get{
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -123,10 +200,11 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-        }  
+        }
     }
-     // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverAExtensions{
+
+    // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
+    namespace SolverEExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -144,4 +222,5 @@ namespace PROJECT_NAME{
             }
         }
     }
+    
 }

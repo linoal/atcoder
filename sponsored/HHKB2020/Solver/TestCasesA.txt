@@ -1,0 +1,19 @@
+[Case Input]
+Y
+a
+
+
+[Case Expect]
+A
+
+
+
+
+
+[Case Input]
+N
+b
+
+
+[Case Expect]
+b

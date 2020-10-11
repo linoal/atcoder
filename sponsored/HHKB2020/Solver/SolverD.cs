@@ -2,26 +2,45 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverAExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverA{
+namespace HHKB2020{
+    class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverA().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                long mod = 1_000_000_007;
+                long T = Get.Long();
+                for(int t=0; t<T; t++){
+                    (long N, long A, long B) = Get.Tuple<long,long,long>();
+                    if(A+B>N){
+                        WriteLine(0);
+                        continue;
+                    }
 
-                var n = Get.Int();
-                WriteLine(n);
-            
+                    long x4 = N-(A-1)-(B-1);
+                    x4 *= x4-1;
+                    x4 %= mod;
+
+                    long ux = (N-(A-1))*(N-(B-1))%mod;
+                    long x3 = (ux - x4)%mod;
+                    if(x3<0) x3+=mod;
+                    long x2 = Mod.Pow(x3, 2, mod);
+                    long u = Mod.Pow(N-(A-1), 2, mod) * Mod.Pow(N-(B-1), 2, mod) % mod;
+                    long x1 = u - x2;
+                    if(x1<0) x1+=mod;
+                    WriteLine(x1%mod);
+                }
+
+
             }
         }
 
@@ -43,7 +62,7 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-
+        
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -99,8 +118,8 @@ namespace PROJECT_NAME{
             }
         }
 
-
-        static class Get{
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -118,30 +137,6 @@ namespace PROJECT_NAME{
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
             public static (T,U,V,W) Tuple<T,U,V,W>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); W w = TypeConv<W>(strs[3]); return(t,u,v,w);}
-            public static T[] Lines<T>(int N){
-                T[] ret = new T[N];
-                for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
-                return ret;
-            }
-        }  
-    }
-     // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverAExtensions{
-        static class ArrayExtensions{
-            public static T[] Fill<T>(this T[] arr, T val){
-                for(int i=0; i<arr.Length; i++){
-                    arr[i] = val;
-                }
-                return arr;
-            }
-            public static T[,] Fill<T>(this T[,] arr, T val ){
-                for(int i=0; i<arr.GetLength(0); i++){
-                    for(int j=0; j<arr.GetLength(1); j++){
-                        arr[i,j] = val;
-                    }
-                }
-                return arr;
-            }
         }
     }
 }
