@@ -1,0 +1,24 @@
+[Case Input]
+3
+2 6 6
+
+[Case Expect]
+2
+
+
+
+
+[Case Input]
+15
+546 3192 1932 630 2100 4116 3906 3234 1302 1806 3528 3780 252 1008 588
+
+[Case Expect]
+42
+
+
+[Case Input]
+1
+100
+
+[Case Expect]
+100
