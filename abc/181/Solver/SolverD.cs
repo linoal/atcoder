@@ -2,31 +2,83 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverBExtensions;
+using ABC181.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverB{
+namespace ABC181{
+    class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverB().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                var a = int.Parse(ReadLine());
-                var b = int.Parse(ReadLine());
-                WriteLine(a+b);
-                WriteLine(a-b);
+                string S = Get.Str();
+
+
+
+                Dictionary<int,int> dic = new Dictionary<int, int>();
+                for(int i=0; i<10; i++){
+                    dic.Add(i,0);
+                }
+                for(int i=0; i<S.Length; i++){
+                    dic[Convert.ToInt32(S[i].ToString())]++;
+                }
+                if(S.Length<=2){
+                    dic[0] = 3 - S.Length; // 0埋め
+                }
+
+
+                // Debug.Put(dic.ToArray(),"dic");
+
+
+                List<int> low3 = new List<int>();
+                for(int i=8; i<1000; i+=8){
+                    string s = i.ToString();
+                    // if(s.Length!=3){
+                    //     continue;
+                    // }
+                    if(s.Contains("0")){
+                        continue;
+                    }
+                    low3.Add(i);
+                }
+
+                bool ans = false;
+                foreach(int l3 in low3){
+                    bool can8 = true;
+                    string ls = l3.ToString();
+                    Dictionary<int,int> ldic = new Dictionary<int, int>();
+                    for(int i=0; i<10; i++){
+                        ldic.Add(i,0);
+                    }
+                    for(int i=0; i<ls.Length; i++){
+                        ldic[Convert.ToInt32(ls[i].ToString())]++;
+                    }
+                    if(ls.Length<=2){
+                        ldic[0] = 3 - ls.Length;
+                    }
+                    for(int i=0; i<10; i++){
+                        if(dic[i] < ldic[i]) can8 = false;
+                    }
+
+                    // Debug.Put(l3,"l3");
+                    // Debug.Put(ldic.ToArray(),"ldic");
+
+                    if(can8) ans = true;
+                }
+                if(ans) {WriteLine("Yes");}
+                else{WriteLine("No");}
+
 
             }
         }
-
 
 
         // === ここからライブラリ
@@ -102,7 +154,8 @@ namespace PROJECT_NAME{
             }
         }
 
-        static class Get{
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -128,7 +181,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverBExtensions{
+    namespace SolverDExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -143,19 +196,6 @@ namespace PROJECT_NAME{
                     }
                 }
                 return arr;
-            }
-
-            // 昇順の配列について、指定の値以上の値を持つ最小のインデックスを返す。
-            // すべて指定の値未満である場合は、配列の最後のインデックス+1(=array.Length)が返る。
-            public static int LowerBound<T>(this T[] array, T val) where T: struct, IComparable<T>{
-                int l = 0;
-                int r = array.Length - 1;
-                while(l<=r){
-                    int mid = l + (r-l)/2;
-                    if(array[mid].CompareTo(val) < 0) l = mid + 1;
-                    else r = mid - 1;
-                }
-                return l;
             }
         }
     }

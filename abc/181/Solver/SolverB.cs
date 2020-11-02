@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverBExtensions;
+using ABC181.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC181{
     class SolverB{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
@@ -19,10 +19,18 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
-                var a = int.Parse(ReadLine());
-                var b = int.Parse(ReadLine());
-                WriteLine(a+b);
-                WriteLine(a-b);
+                int N = Get.Int();
+                int[] A = new int[N];
+                int[] B = new int[N];
+                for(int i=0; i<N; i++){
+                    (A[i], B[i]) = Get.Tuple<int,int>();
+                }
+                long sum = 0;
+                for(int i=0; i<N; i++){
+                    (long a, long b) = ((long)A[i],(long)B[i]);
+                    sum += (b * (b+1) - a * (a-1))/2;
+                }
+                WriteLine(sum);
 
             }
         }
@@ -143,19 +151,6 @@ namespace PROJECT_NAME{
                     }
                 }
                 return arr;
-            }
-
-            // 昇順の配列について、指定の値以上の値を持つ最小のインデックスを返す。
-            // すべて指定の値未満である場合は、配列の最後のインデックス+1(=array.Length)が返る。
-            public static int LowerBound<T>(this T[] array, T val) where T: struct, IComparable<T>{
-                int l = 0;
-                int r = array.Length - 1;
-                while(l<=r){
-                    int mid = l + (r-l)/2;
-                    if(array[mid].CompareTo(val) < 0) l = mid + 1;
-                    else r = mid - 1;
-                }
-                return l;
             }
         }
     }

@@ -2,30 +2,100 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverBExtensions;
+using ABC181.SolverEExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverB{
+namespace ABC181{
+    class SolverE{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverB().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                (int N, int M) = Get.Tuple<int,int>();
+                long[] H = Get.Longs();
+                long[] W = Get.Longs();
+                Array.Sort(H); Array.Sort(W);
 
-                var a = int.Parse(ReadLine());
-                var b = int.Parse(ReadLine());
-                WriteLine(a+b);
-                WriteLine(a-b);
+                long[] sumA = new long[N/2+1];
+                long[] sumB = new long[N/2+1];
+                sumA[0] = 0; sumB[0] = 0;
+                for(int i=1; i*2<N; i++){
+                    sumA[i] = sumA[i-1] + Abs(H[2*i-1] - H[2*i-2]);
+                    sumB[i] = sumB[i-1] + Abs(H[2*i] - H[2*i-1]);
+                }
+
+                // Debug.Put(H,"H");
+
+
+                // Debug.Put(sumA,"sumA"); Debug.Put(sumB,"sumB");
+
+                long minDif = long.MaxValue;
+
+                // int teacherIndexPrev = -1;
+                for(int i=0; i<M; i++){
+                    // int teacherIndex = N-1;
+                    // for(int j=Max(teacherIndexPrev,0); j<N-1; j++){
+                    //     if(W[i]<H[j]){
+                    //         teacherIndex = j-1;
+                    //         break;
+                    //     }
+                        
+                    // }
+                    // // Debug.Put(W[i], "teacher height");
+                    // if(W[i] <= H[0]){
+                    //     teacherIndex = -1;
+                    // }
+
+                    // teacherIndexPrev = teacherIndex;
+                    int teacherIndex = H.LowerBound(W[i])-1;
+                    // {
+                    //     int l=0; int r=N-1; int c = (l+r)/2;
+                    //     while(l<r){
+                            
+                    //         c = l + (r-l)/2;
+                    //         // Debug.Put(l,"l",r,"r",c,"c"); ReadLine();
+                    //         if(H[c]<W[i]) l = c+1;
+                    //         else r = c;
+                            
+                    //     }
+                    //     teacherIndex = r-1;
+                    //     if(teacherIndex == N-2){
+                    //         if(H[N-1] <= W[i]){
+                    //             teacherIndex = N-1;
+                    //         }
+                    //     }
+                    //     // Debug.Put(teacherIndex,"teacherIndex");
+                    // }
+
+
+
+                    // Debug.Put(teacherIndex,"teacherIndex");
+
+                    long diff = 0;
+                    diff += sumA[(teacherIndex+1)/2];
+                    diff += sumB[N/2];
+                    diff -= sumB[(teacherIndex+1)/2];
+                    if(teacherIndex%2==1 || teacherIndex==-1){
+                        diff += Abs(W[i] - H[teacherIndex+1]);
+                    }else{
+                        diff += Abs(W[i] - H[teacherIndex]);
+                    }
+                    minDif = Min(minDif, diff);
+                }
+                WriteLine(minDif);
+
+
 
             }
         }
+
 
 
 
@@ -102,7 +172,8 @@ namespace PROJECT_NAME{
             }
         }
 
-        static class Get{
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -125,10 +196,11 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
+            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverBExtensions{
+    namespace SolverEExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -145,8 +217,6 @@ namespace PROJECT_NAME{
                 return arr;
             }
 
-            // 昇順の配列について、指定の値以上の値を持つ最小のインデックスを返す。
-            // すべて指定の値未満である場合は、配列の最後のインデックス+1(=array.Length)が返る。
             public static int LowerBound<T>(this T[] array, T val) where T: struct, IComparable<T>{
                 int l = 0;
                 int r = array.Length - 1;

@@ -2,28 +2,50 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverBExtensions;
+using ABC181.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverB{
+namespace ABC181{
+    class SolverC{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverB().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                var a = int.Parse(ReadLine());
-                var b = int.Parse(ReadLine());
-                WriteLine(a+b);
-                WriteLine(a-b);
+                int N = Get.Int();
+                int[] x = new int[N];
+                int[] y = new int[N];
+                for(int i=0; i<N; i++){
+                    (x[i],y[i]) = Get.Tuple<int,int>();
+                }
+                bool ans = false;
+                for(int i=0; i<N; i++){
+                    for(int j=i+1; j<N; j++){
+                        for(int k=j+1; k<N; k++){
+                            int dx1 = x[i] - x[j];
+                            int dy1 = y[i] - y[j];
+                            int dx2 = x[i] - x[k];
+                            int dy2 = y[i] - y[k];
+                            if(dx2*dy1 == dx1*dy2){
+                                ans = true;
+                            }
+                        }
+                    }
+                }
+                if(ans==true){
+                    WriteLine("Yes");
+                }else{
+                    WriteLine("No");
+                }
 
+                
             }
         }
 
@@ -102,7 +124,9 @@ namespace PROJECT_NAME{
             }
         }
 
-        static class Get{
+        
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -128,7 +152,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverBExtensions{
+    namespace SolverCExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -143,19 +167,6 @@ namespace PROJECT_NAME{
                     }
                 }
                 return arr;
-            }
-
-            // 昇順の配列について、指定の値以上の値を持つ最小のインデックスを返す。
-            // すべて指定の値未満である場合は、配列の最後のインデックス+1(=array.Length)が返る。
-            public static int LowerBound<T>(this T[] array, T val) where T: struct, IComparable<T>{
-                int l = 0;
-                int r = array.Length - 1;
-                while(l<=r){
-                    int mid = l + (r-l)/2;
-                    if(array[mid].CompareTo(val) < 0) l = mid + 1;
-                    else r = mid - 1;
-                }
-                return l;
             }
         }
     }

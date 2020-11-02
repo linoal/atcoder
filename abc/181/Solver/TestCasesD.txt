@@ -1,0 +1,30 @@
+[Case Input]
+1234
+
+[Case Expect]
+Yes
+
+
+
+
+[Case Input]
+1333
+
+[Case Expect]
+No
+
+
+
+
+[Case Input]
+8
+
+
+[Case Expect]
+Yes
+
+[Case Input]
+161
+
+[Case Expect]
+No

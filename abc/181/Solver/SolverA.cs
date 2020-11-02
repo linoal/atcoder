@@ -2,31 +2,32 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverBExtensions;
+using ABC181.SolverAExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverB{
+namespace ABC181{
+    class SolverA{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverB().Solve();
+            new SolverA().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                var a = int.Parse(ReadLine());
-                var b = int.Parse(ReadLine());
-                WriteLine(a+b);
-                WriteLine(a-b);
-
+                int N = Get.Int();
+                if(N%2==0){
+                    WriteLine("White");
+                }else{
+                    WriteLine("Black");
+                }
+            
             }
         }
-
 
 
         // === ここからライブラリ
@@ -46,7 +47,7 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-        
+
         static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
 
@@ -102,6 +103,7 @@ namespace PROJECT_NAME{
             }
         }
 
+
         static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
@@ -125,10 +127,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-        }
+        }  
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverBExtensions{
+    namespace SolverAExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -143,19 +145,6 @@ namespace PROJECT_NAME{
                     }
                 }
                 return arr;
-            }
-
-            // 昇順の配列について、指定の値以上の値を持つ最小のインデックスを返す。
-            // すべて指定の値未満である場合は、配列の最後のインデックス+1(=array.Length)が返る。
-            public static int LowerBound<T>(this T[] array, T val) where T: struct, IComparable<T>{
-                int l = 0;
-                int r = array.Length - 1;
-                while(l<=r){
-                    int mid = l + (r-l)/2;
-                    if(array[mid].CompareTo(val) < 0) l = mid + 1;
-                    else r = mid - 1;
-                }
-                return l;
             }
         }
     }
