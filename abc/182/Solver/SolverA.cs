@@ -2,33 +2,25 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverDExtensions;
+using ABC182.SolverAExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ABC182{
+    class SolverA{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverA().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-
-                var n = Get.Int();
-                var a = new int[n];
-                foreach(var i in Range(0,n)){
-                    a[i] = Get.Int();
-                }
-                foreach(var i in a){
-                    WriteLine(i);
-                }
-
-
+                (int A, int B) = Get.Tuple<int,int>();
+                WriteLine(2*A+100-B);
+                
             }
         }
 
@@ -50,54 +42,51 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-        
-        static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
-            public static bool isDebugMode = true;
+
+        static class Debug{
             public static void Put(object obj, int padLeft = 0, bool newline = true){
-                if (!isDebugMode) return;
+
                 if (obj is Array arr){
                     if( arr.Rank == 1 ){
-                        Write(Green("["));
+                        Write("[");
                         for(int i=0; i<arr.Length; i++){
                             Put(arr.GetValue(i), padLeft, false);
                             if( i < arr.Length - 1 ) Write(", ");
                         }
-                        Write(Green("]"));
+                        Write("]");
                     }
                     else if( arr.Rank == 2 ){
-                        Write(Green("[\n"));
+                        Write("[\n");
                         for(int i=0; i<arr.GetLength(0); i++){
-                            Write(Green(" ["));
+                            Write(" [");
                             for(int j=0; j<arr.GetLength(1); j++){
                                 Put(arr.GetValue(i,j), padLeft, false);
-                                if (j < arr.GetLength(1) - 1) Write(Green(", "));
+                                if (j < arr.GetLength(1) - 1) Write(", ");
                             }
-                            if (i < arr.GetLength(0) - 1 ) Write(Green("],\n"));
-                            else Write(Green("]\n"));
+                            if (i < arr.GetLength(0) - 1 ) Write("],\n");
+                            else Write("]\n");
                         }
-                        Write(Green("]"));
+                        Write("]");
                     }
                 }
                 else if( obj is ValueType val ){
-                    Put(val.ToString(), padLeft, newline);
+                    Write(val.ToString().PadLeft(padLeft));
                 }
                 else if( obj is string str ){
-                    Write(Green(str.PadLeft(padLeft)));
+                    Write(str.PadLeft(padLeft));
                 }
                 else{
-                    Write(Green(obj.ToString().PadLeft(padLeft)));
+                    Write(obj.ToString().PadLeft(padLeft));
                 }
 
                 if(newline) Write("\n");
             }
 
             public static void Put(object obj, string label, int padLeft = 0, bool newline = true){
-                if (!isDebugMode) return;
-                Write(Bold(Green(label + ": ")));
+                Write("\u001b[32m{0}:\u001b[0m ", label);
                 Put(obj, padLeft, newline);
             }
             public static void Put(params object[] args){
-                if (!isDebugMode) return;
                 if (args.Length % 2 != 0){
                     WriteLine("Debug.Put(params): arg length shall be multiple of 2.");
                 }
@@ -107,17 +96,10 @@ namespace PROJECT_NAME{
                 }
                 Write("\n");
             }
-
-            static string Green(string str){
-                return "\u001b[32m" + str + "\u001b[0m";
-            }
-            static string Bold(string str){
-                return "\u001b[1m" + str + "\u001b[0m";
-            }
         }
 
-        
-        private static class Get{
+
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -140,10 +122,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-        }
+        }  
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverAExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

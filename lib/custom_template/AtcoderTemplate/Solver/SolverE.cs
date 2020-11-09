@@ -44,50 +44,53 @@ namespace PROJECT_NAME{
             }
         }
         
-        static class Debug{
+        static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
+            public static bool isDebugMode = true;
             public static void Put(object obj, int padLeft = 0, bool newline = true){
-
+                if (!isDebugMode) return;
                 if (obj is Array arr){
                     if( arr.Rank == 1 ){
-                        Write("[");
+                        Write(Green("["));
                         for(int i=0; i<arr.Length; i++){
                             Put(arr.GetValue(i), padLeft, false);
                             if( i < arr.Length - 1 ) Write(", ");
                         }
-                        Write("]");
+                        Write(Green("]"));
                     }
                     else if( arr.Rank == 2 ){
-                        Write("[\n");
+                        Write(Green("[\n"));
                         for(int i=0; i<arr.GetLength(0); i++){
-                            Write(" [");
+                            Write(Green(" ["));
                             for(int j=0; j<arr.GetLength(1); j++){
                                 Put(arr.GetValue(i,j), padLeft, false);
-                                if (j < arr.GetLength(1) - 1) Write(", ");
+                                if (j < arr.GetLength(1) - 1) Write(Green(", "));
                             }
-                            if (i < arr.GetLength(0) - 1 ) Write("],\n");
-                            else Write("]\n");
+                            if (i < arr.GetLength(0) - 1 ) Write(Green("],\n"));
+                            else Write(Green("]\n"));
                         }
-                        Write("]");
+                        Write(Green("]"));
                     }
                 }
                 else if( obj is ValueType val ){
-                    Write(val.ToString().PadLeft(padLeft));
+                    Put(val.ToString(), padLeft, newline);
                 }
                 else if( obj is string str ){
-                    Write(str.PadLeft(padLeft));
+                    Write(Green(str.PadLeft(padLeft)));
                 }
                 else{
-                    Write(obj.ToString().PadLeft(padLeft));
+                    Write(Green(obj.ToString().PadLeft(padLeft)));
                 }
 
                 if(newline) Write("\n");
             }
 
             public static void Put(object obj, string label, int padLeft = 0, bool newline = true){
-                Write("\u001b[32m{0}:\u001b[0m ", label);
+                if (!isDebugMode) return;
+                Write(Bold(Green(label + ": ")));
                 Put(obj, padLeft, newline);
             }
             public static void Put(params object[] args){
+                if (!isDebugMode) return;
                 if (args.Length % 2 != 0){
                     WriteLine("Debug.Put(params): arg length shall be multiple of 2.");
                 }
@@ -96,6 +99,13 @@ namespace PROJECT_NAME{
                     Write("   ");
                 }
                 Write("\n");
+            }
+
+            static string Green(string str){
+                return "\u001b[32m" + str + "\u001b[0m";
+            }
+            static string Bold(string str){
+                return "\u001b[1m" + str + "\u001b[0m";
             }
         }
 

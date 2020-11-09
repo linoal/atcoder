@@ -2,31 +2,87 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverDExtensions;
+using ABC182.SolverEExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ABC182{
+    class SolverE{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                (int H, int W, int N, int M) = Get.Tuple<int,int,int,int>();
+                var A = new int[N]; var B = new int[N];
+                var C = new int[N]; var D = new int[N];
+                var map = new char[H,W].Fill('.');
+                
+                for(int i=0; i<N; i++){
+                    (A[i], B[i]) = Get.Tuple<int,int>();
+                    A[i]--; B[i]--;
+                }
+                for(int i=0; i<M; i++){
+                    (C[i], D[i]) = Get.Tuple<int,int>();
+                    C[i]--; D[i]--;
+                    map[C[i],D[i]] = 'x';
+                }
 
-                var n = Get.Int();
-                var a = new int[n];
-                foreach(var i in Range(0,n)){
-                    a[i] = Get.Int();
+
+                // 上下に見る
+                var vmap = (char[,])map.Clone();
+                for(int i=0; i<N; i++){
+                    var y = A[i]; var x = B[i];
+                    if(vmap[y,x] == 'l') continue; // 枝刈り
+                    // 上に見る
+                    // Debug.Put(y,"y", x,"x", vmap[y,x], "vmap[y,x]");
+                    while(y >= 0 && vmap[y,x] == '.'){
+                        vmap[y,x] = 'l';
+                        y--;
+                    }
+                    // 下に見る 
+                    y = A[i]+1;
+                    while(y < H && vmap[y,x] == '.' ){
+                        vmap[y,x] = 'l';
+                        y++;
+                    }
+
                 }
-                foreach(var i in a){
-                    WriteLine(i);
+
+                // 左右に見る
+                var hmap = (char[,])map.Clone();
+                for(int i=0; i<N; i++){
+                    var y = A[i]; var x = B[i];
+                    if(hmap[y,x] == 'l') continue;
+                    // 左に見る
+                    while(x >= 0 && hmap[y,x] == '.'){
+                        hmap[y,x] = 'l';
+                        x--;
+                    }
+                    // 右に見る
+                    x = B[i] + 1;
+                    while( x < W && hmap[y,x] == '.' ){
+                        hmap[y,x] = 'l';
+                        x++;
+                    }
                 }
+
+                // 集計
+                long ans = 0;
+                for(int y=0; y<H; y++){
+                    for(int x=0; x<W; x++){
+                        if(vmap[y,x]=='l' || hmap[y,x]=='l') ans++;
+                    }
+                }
+                WriteLine(ans);
+
+                // Debug.Put(map,"map");
+
 
 
             }
@@ -140,10 +196,11 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
+            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverEExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

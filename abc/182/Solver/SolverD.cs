@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverDExtensions;
+using ABC182.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC182{
     class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
@@ -19,14 +19,25 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
-                var n = Get.Int();
-                var a = new int[n];
-                foreach(var i in Range(0,n)){
-                    a[i] = Get.Int();
+                int N = Get.Int();
+                long[] A = Get.Longs();
+                var S = new long[N+1];
+                var M = new long[N+1];
+                S[0] = 0; M[0] = 0;
+                for(int i=1; i<=N; i++){
+                    S[i] = S[i-1] + A[i-1];
+                    M[i] = Max(M[i-1], S[i]);
                 }
-                foreach(var i in a){
-                    WriteLine(i);
+                long pos=0;
+                long max=0;
+                for(int i=1; i<=N; i++){
+                    max = Max(max, pos+M[i]);
+                    pos+=S[i];
+
                 }
+                WriteLine(max);
+                // Debug.Put(S,"S"); Debug.Put(M,"M");
+                
 
 
             }

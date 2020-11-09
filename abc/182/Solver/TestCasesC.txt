@@ -1,0 +1,58 @@
+[Case Input]
+35
+
+
+[Case Expect]
+1
+
+
+
+
+[Case Input]
+
+369
+
+[Case Expect]
+0
+
+
+
+
+[Case Input]
+6227384
+
+
+[Case Expect]
+1
+
+
+[Case Input]
+11
+
+
+
+[Case Expect]
+-1
+
+
+
+[Case Input]
+6
+
+
+[Case Expect]
+0
+
+[Case Input]
+111
+
+[Case Expect]
+0
+
+
+
+[Case Input]
+77
+
+[Case Expect]
+-1

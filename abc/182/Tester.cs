@@ -4,10 +4,9 @@ using System.Text;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 using static System.Console;
 
-namespace PROJECT_NAME
+namespace ABC182
 {
     static class Tester
     {
@@ -30,7 +29,6 @@ namespace PROJECT_NAME
         }
 
         // 戻り値 : caseNum番のテストケースが存在しない場合はnull、存在する場合はテストをしてその成否がboolで返る。
-        // ただし、色付き(ANSIコード)を含む行はデバッグ用とみなして正誤判定から除外する。
         public static bool? TestCase(Action targetAct, string fileName, int caseNum)
         {
             var caseInput = ReadTestCaseInput(caseNum, fileName);
@@ -45,9 +43,8 @@ namespace PROJECT_NAME
                 var stopwatch = Stopwatch.StartNew();
                 targetAct();
                 stopwatch.Stop();
-                var actual_withDebug = output.ToString().Trim();
-                var actual_withoutDebug = RemoveColoredLine(actual_withDebug).Trim();
-                var isCorrect = actual_withoutDebug == caseExpect;
+                var actual = output.ToString().Trim();
+                var isCorrect = actual == caseExpect;
                 
                 SetOut(savedConsoleOut); // ここから上の Console.Out はテスト対象への入力になるので標準出力には表示されない
                 // 標準出力にテスト結果を出力
@@ -60,28 +57,18 @@ namespace PROJECT_NAME
                     Write($"expected:\u001b[0m {caseExpect}");
                 }
                 Write("\u001b[36m"); // 色
-                if (actual_withDebug.Count(c => c == '\n') > 0)
+                if (actual.Count(c => c == '\n') > 0)
                 {
-                    WriteLine($"\nactual:\u001b[0m"); WriteLine(actual_withDebug);
+                    WriteLine($"\nactual:\u001b[0m"); WriteLine(actual);
                 }else
                 {
-                    WriteLine($"\tactual:\u001b[0m {actual_withDebug}");
+                    WriteLine($"\tactual:\u001b[0m {actual}");
                 }
                 // WriteLine($"expected: \"{caseExpect}\", actual: \"{actual}\"");
                 Write(isCorrect ? "\u001b[36m\u001b[1mPASSED\u001b[0m" : "\u001b[33mFAILED\u001b[0m");
                 WriteLine($"\t\u001b[36mtime: {stopwatch.ElapsedMilliseconds}ms \u001b[0m");
                 return isCorrect;
             }
-        }
-
-        static string RemoveColoredLine(string str){
-            string[] strs = str.Split("\n");
-            for(int i=0; i<strs.Length; i++){
-                if(strs[i].Contains("\u001b[")){
-                    strs[i] = "";
-                }
-            }
-            return String.Join("",strs);
         }
 
         static string ReadTestCaseInput(int caseNum, string fileName)
@@ -147,7 +134,5 @@ namespace PROJECT_NAME
             }
             return sb.ToString().Trim();
         }
-
-        
     }
 }
