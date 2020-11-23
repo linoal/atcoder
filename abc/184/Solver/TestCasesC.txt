@@ -1,0 +1,59 @@
+[Case Input]
+1 1
+5 6
+
+
+[Case Expect]
+2
+
+
+
+
+
+[Case Input]
+1 1
+1 200001
+
+
+[Case Expect]
+2
+
+
+
+
+[Case Input]
+2 3
+998244353 998244853
+
+
+[Case Expect]
+3
+
+[Case Input]
+0 0
+10 13
+
+
+[Case Expect]
+2
+
+
+
+[Case Input]
+1 1
+1 1
+
+
+
+[Case Expect]
+0
+
+
+[Case Input]
+0 0
+-101 -101
+
+
+
+[Case Expect]
+1

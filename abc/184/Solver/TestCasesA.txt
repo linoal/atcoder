@@ -6,18 +6,27 @@
 
 
 [Case Input]
+1 2
+3 4
 
 [Case Expect]
+-2
 
 
 
 
 [Case Input]
+0 -1
+1 0
 
 [Case Expect]
+1
 
 
 
 [Case Input]
+100 100
+100 100
 
 [Case Expect]
+0

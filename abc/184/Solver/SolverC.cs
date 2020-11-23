@@ -2,28 +2,50 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC184.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverE{
+namespace ABC184{
+    class SolverC{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+
+                (long r1, long c1) = Get.Tuple<long,long>();
+                (long r2, long c2) = Get.Tuple<long,long>();
                 
-
-
-
+                if(r1==r2 && c1==c2){
+                    WriteLine(0);
+                    return;
+                }
+                if(r1+c1==r2+c2 || r1-c1==r2-c2 || Abs(r1-r2)+Abs(c1-c2)<=3){
+                    WriteLine(1);
+                    return;
+                }
+                if((r2-r1+c2-c1)%2==0){
+                    WriteLine(2);
+                    return;
+                }
+                // Debug.Put(r2-r1,"x",c2-c1,"y", r2-r1-(c2-c1),"minus", r2-r1+c2-c1,"plus");
+                if(Abs((r2-r1)-(c2-c1))<=3 || Abs((r2-r1)+(c2-c1))<=3){
+                    WriteLine(2);
+                    return;
+                }
+                
+                WriteLine(3);
+                
+                
             }
         }
+
 
 
         // === ここからライブラリ
@@ -115,7 +137,8 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get{
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -138,11 +161,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverEExtensions{
+    namespace SolverCExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

@@ -1,29 +1,35 @@
-﻿using System;
+﻿using System.Resources;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC183.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverE{
+namespace ABC183{
+    class SolverB{
+
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            Debug.isDebugMode = false;
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-                
 
-
+                (long sx, long sy, long gx, long gy) = Get.Tuple<long,long,long,long>();
+                double ans = (gy+sy)*sx - (sx-gx)*sy;
+                ans /= gy+sy;
+                WriteLine(ans);
 
             }
         }
+
 
 
         // === ここからライブラリ
@@ -76,11 +82,6 @@ namespace PROJECT_NAME{
                 }
                 else if( obj is string str ){
                     Write(Green(str.PadLeft(padLeft)));
-                }else if( obj is Dictionary<int,int> dic){
-                    Write(Green($"dicionary: "));
-                    foreach(var pair in dic){
-                        Write(Green($"{pair.Key}=>{pair.Value}, "));
-                    }
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -114,8 +115,7 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -138,11 +138,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverEExtensions{
+    namespace SolverBExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -151,10 +150,8 @@ namespace PROJECT_NAME{
                 return arr;
             }
             public static T[,] Fill<T>(this T[,] arr, T val ){
-                int len0 = arr.GetLength(0);
-                int len1 = arr.GetLength(1);
-                for(int i=0; i<len0; i++){
-                    for(int j=0; j<len1; j++){
+                for(int i=0; i<arr.GetLength(0); i++){
+                    for(int j=0; j<arr.GetLength(1); j++){
                         arr[i,j] = val;
                     }
                 }

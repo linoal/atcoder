@@ -20,7 +20,7 @@ namespace ABC182{
             checked{
                 (int H, int W, int N, int M) = Get.Tuple<int,int,int,int>();
                 var A = new int[N]; var B = new int[N];
-                var C = new int[N]; var D = new int[N];
+                var C = new int[M]; var D = new int[M];
                 var map = new char[H,W].Fill('.');
                 
                 for(int i=0; i<N; i++){

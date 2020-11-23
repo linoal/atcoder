@@ -1,7 +1,7 @@
 using System;
 using static System.Console;
 
-namespace PROJECT_NAME
+namespace ABC183
 {
     
     static class ContestMain
@@ -9,7 +9,7 @@ namespace PROJECT_NAME
         static readonly string TEXT_FOLDER = "Solver";
         static void Main(){
 chooseOp:
-            WriteLine("Choose operation [e,t][a,b,c,d,e,f]:"); // (Exec / Test) question (A/B/C/D/E)
+            WriteLine("Choose operation [e,t][a,b,c,d,e]:"); // (Exec / Test) question (A/B/C/D/E)
             var q = ReadLine();
             switch(q)
             {

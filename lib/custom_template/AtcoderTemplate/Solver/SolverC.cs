@@ -82,6 +82,11 @@ namespace PROJECT_NAME{
                 }
                 else if( obj is string str ){
                     Write(Green(str.PadLeft(padLeft)));
+                }else if( obj is Dictionary<int,int> dic){
+                    Write(Green($"dicionary: "));
+                    foreach(var pair in dic){
+                        Write(Green($"{pair.Key}=>{pair.Value}, "));
+                    }
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -152,8 +157,10 @@ namespace PROJECT_NAME{
                 return arr;
             }
             public static T[,] Fill<T>(this T[,] arr, T val ){
-                for(int i=0; i<arr.GetLength(0); i++){
-                    for(int j=0; j<arr.GetLength(1); j++){
+                int len0 = arr.GetLength(0);
+                int len1 = arr.GetLength(1);
+                for(int i=0; i<len0; i++){
+                    for(int j=0; j<len1; j++){
                         arr[i,j] = val;
                     }
                 }

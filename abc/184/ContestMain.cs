@@ -1,7 +1,7 @@
 using System;
 using static System.Console;
 
-namespace PROJECT_NAME
+namespace ABC184
 {
     
     static class ContestMain

@@ -2,24 +2,58 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC184.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverE{
+namespace ABC184{
+    class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-                
 
+                (int a, int b, int c) = Get.Tuple<int,int,int>();
+
+                double[,,] dp = new double[101,101,101];
+                for(int i=0; i<101; i++){
+                    for(int j=0; j<101; j++){
+                        for(int k=0; k<101; k++){
+                            if(i==100 || j==100 || k==100){
+                                dp[i,j,k] = 0;
+                            }
+                            if(j==0 && k==0 && i!=100){
+                                dp[i,j,k] = (double)100-i;
+                            }
+                            if(k==0 && i==0 && j!=100){
+                                dp[i,j,k] = (double)100-j;
+                            }
+                            if(i==0 && j==0 && k!=100){
+                                dp[i,j,k] = (double)100-k;
+                            }
+                        }
+                    }
+                }
+
+                for(int i=99; i>=0; i--){
+                    for(int j=99; j>=0; j--){
+                        for(int k=99; k>=0; k--){
+                            if(i==0 && j==0 && k==0 ) continue;
+                            int sum = i+j+k;
+                            dp[i,j,k] = ((dp[i+1,j,k]+1) * i + (dp[i,j+1,k]+1) * j + (dp[i,j,k+1]+1) * k)/ (double)sum;
+                            // Debug.Put(dp[i,j,k],"dp[i,j,k]",i,"i",j,"j",k,"k", dp[i+1,j,k],"dp[i+1,j,k]", dp[i,j+1,k],"dp[i,j+1,k]",dp[i,j,k+1],"dp[i,j,k+1",sum,"sum");
+                            // ReadLine();
+                            if(i==a && j==b && k==c) break;
+                        }
+                    }
+                }
+                WriteLine(dp[a,b,c]);
 
 
             }
@@ -138,11 +172,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverEExtensions{
+    namespace SolverDExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

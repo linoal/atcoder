@@ -2,25 +2,52 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC183.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverE{
+namespace ABC183{
+    class SolverD{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-                
 
+                (int N, long W) = Get.Tuple<int,long>();
+                var S = new int[N]; var T = new int[N]; var P = new long[N];
+                for(int i=0; i<N; i++){
+                    (S[i],T[i],P[i]) = Get.Tuple<int,int,long>();
+                }
 
+                int tMax = (int)(2*Mod.Pow(10,5)+2);
+                long[] imos = new long[tMax];
+                imos.Fill(0);
+                for(int i=0; i<N; i++){
+                    imos[S[i]] += P[i];
+                    imos[T[i]] -= P[i];
+                }
+
+                long u = 0;
+                bool ans = true;
+
+                for(int i=0; i<tMax; i++){
+                    u += imos[i];
+                    if(u>W){
+                        ans=false;
+                        break;
+                    }
+                }
+                if(ans){
+                    WriteLine("Yes");
+                }else{
+                    WriteLine("No");
+                }
 
             }
         }
@@ -76,11 +103,6 @@ namespace PROJECT_NAME{
                 }
                 else if( obj is string str ){
                     Write(Green(str.PadLeft(padLeft)));
-                }else if( obj is Dictionary<int,int> dic){
-                    Write(Green($"dicionary: "));
-                    foreach(var pair in dic){
-                        Write(Green($"{pair.Key}=>{pair.Value}, "));
-                    }
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -138,11 +160,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverEExtensions{
+    namespace SolverDExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -151,10 +172,8 @@ namespace PROJECT_NAME{
                 return arr;
             }
             public static T[,] Fill<T>(this T[,] arr, T val ){
-                int len0 = arr.GetLength(0);
-                int len1 = arr.GetLength(1);
-                for(int i=0; i<len0; i++){
-                    for(int j=0; j<len1; j++){
+                for(int i=0; i<arr.GetLength(0); i++){
+                    for(int j=0; j<arr.GetLength(1); j++){
                         arr[i,j] = val;
                     }
                 }

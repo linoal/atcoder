@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC183.SolverEExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC183{
     class SolverE{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
@@ -18,7 +18,54 @@ namespace PROJECT_NAME{
 
         public void Solve(){
             checked{
-                
+                long mod = Mod.Pow(10,9)+7;
+                (int H, int W) = Get.Tuple<int,int>();
+                var S = new char[H+1,W+1];
+                for(int i=1; i<H+1; i++){
+                    string l = Get.Str();
+                    S[i,0] = '.';
+                    for(int j=1; j<W+1; j++){
+                        S[i,j] = l[j-1];
+                    }
+                    // S[i,W] = '.';
+                }
+                for(int i=0; i<W; i++){
+                    S[0,i]='.';
+                }
+                // Debug.Put(S,"S");
+
+                var cost = new long[H+1,W+1].Fill(0);
+                cost[1,1] = 1;
+
+                var su = new long[H+1,W+1]; su.Fill(0); su[1,1]=1;
+                var sd = new long[H+1,W+1]; sd.Fill(0); sd[1,1]=1;
+                var sl = new long[H+1,W+1]; sl.Fill(0); sl[1,1]=1;
+
+                for(int i=1; i<H+1; i++){
+                    for(int j=1; j<W+1; j++){
+                        if(S[i,j]=='#'){
+                            continue;
+                        };
+                        if(i==1 && j==1) continue;
+
+                        long ct = 0;
+                        ct += su[i-1,j] % mod;
+                        ct += sd[i-1,j-1] % mod;
+                        ct += sl[i,j-1] % mod;
+                        ct%=mod;
+                        cost[i,j] = ct % mod;
+                        su[i,j] = (su[i-1,j] + ct) % mod;
+                        sd[i,j] = (sd[i-1,j-1] + ct) % mod;
+                        sl[i,j] = (sl[i,j-1] + ct) % mod;
+
+                        // Debug.Put(su,"su");
+                        // Debug.Put(sd,"sd");
+                        // Debug.Put(sl,"sl");
+                        // Debug.Put(cost,"cost");
+                        // ReadLine();
+                    }
+                }
+                WriteLine(cost[H,W] % mod);
 
 
 
@@ -76,11 +123,6 @@ namespace PROJECT_NAME{
                 }
                 else if( obj is string str ){
                     Write(Green(str.PadLeft(padLeft)));
-                }else if( obj is Dictionary<int,int> dic){
-                    Write(Green($"dicionary: "));
-                    foreach(var pair in dic){
-                        Write(Green($"{pair.Key}=>{pair.Value}, "));
-                    }
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));

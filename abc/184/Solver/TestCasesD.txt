@@ -1,29 +1,33 @@
 [Case Input]
-
+99 99 99
 
 [Case Expect]
-
+1.000000000
 
 
 
 
 [Case Input]
-
+98 99 99
 
 [Case Expect]
+1.331081081
 
 
 
 
 [Case Input]
+0 0 1
 
 
 [Case Expect]
-
-
+99.000000000
 
 
 [Case Input]
+31 41 59
+
 
 
 [Case Expect]
+91.835008202

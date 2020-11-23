@@ -1,29 +1,32 @@
 [Case Input]
+3 0
+xox
 
 
 [Case Expect]
+0
 
 
 
 
 
 [Case Input]
+20 199999
+oooooooooxoooooooooo
 
 
 [Case Expect]
-
+200017
 
 
 
 [Case Input]
+20 10
+xxxxxxxxxxxxxxxxxxxx
 
 
 [Case Expect]
+0
 
 
 
-
-[Case Input]
-
-
-[Case Expect]

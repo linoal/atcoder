@@ -43,8 +43,8 @@
 24
 
 [Case Input]
-1 1 1 0
+1 1 0 1
 1 1
 
 [Case Expect]
-1
+0

@@ -1,29 +1,42 @@
-﻿using System;
+﻿using System.Resources;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC184.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverE{
+namespace ABC184{
+    class SolverB{
+
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            Debug.isDebugMode = false;
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                (int n, int x) = Get.Tuple<int,int>();
+                char[] s = Get.Str().ToCharArray();
+                for(int i=0; i<n; i++){
+                    if(s[i]=='o'){
+                        x++;
+                    }else{
+                        if(x>0){
+                            x--;
+                        }
+                    }
+                }
+                WriteLine(x);
                 
-
-
-
             }
         }
+
 
 
         // === ここからライブラリ
@@ -114,8 +127,7 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -138,11 +150,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverEExtensions{
+    namespace SolverBExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

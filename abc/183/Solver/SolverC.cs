@@ -2,28 +2,68 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PROJECT_NAME.SolverEExtensions;
+using ABC183.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverE{
+namespace ABC183{
+    class SolverC{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverE().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                (int N, long K) = Get.Tuple<int,long>();
+                long[,] T = new long[N,N];
+                for(int i=0; i<N; i++){
+                    long[] arr = Get.Longs();
+                    for(int j=0; j<N; j++){
+                        T[i,j] = arr[j];
+                    }
+                }
+                var perm = new Permutation();
+
+                long ans = 0;
+                foreach(var p in perm.Enumerate(Range(1,N-1))){
+                    long cost = T[0,p[0]];
+                    for(int i=1; i<N-1; i++){
+                        // Debug.Put(p,"p",i,"i");
+                        cost += T[p[i-1],p[i]];
+                    }
+                    cost += T[p[N-2],0];
+                    if(cost==K) ans++;
+                }
+                WriteLine(ans);
+
                 
-
-
-
+                
             }
         }
+
+
+        // 順列の全列挙。使い方はnewして foreach(var p in perm.Enumerate()) する。
+    public class Permutation{
+        // 参考 https://qiita.com/gushwell/items/8780fc2b71f2182f36ac
+        public IEnumerable<T[]> Enumerate<T>(IEnumerable<T> items){
+            if(items.Count() == 1){
+                yield return new[] {items.First()};
+                yield break;
+            }
+            foreach(var item in items){
+                var leftside = new T[] {item};
+                var unused = items.Except(leftside);
+                foreach(var rightside in Enumerate(unused)){
+                    yield return leftside.Concat(rightside).ToArray();
+                }
+            }
+        }
+    }
+
 
 
         // === ここからライブラリ
@@ -76,11 +116,6 @@ namespace PROJECT_NAME{
                 }
                 else if( obj is string str ){
                     Write(Green(str.PadLeft(padLeft)));
-                }else if( obj is Dictionary<int,int> dic){
-                    Write(Green($"dicionary: "));
-                    foreach(var pair in dic){
-                        Write(Green($"{pair.Key}=>{pair.Value}, "));
-                    }
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -115,7 +150,8 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get{
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -138,11 +174,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverEExtensions{
+    namespace SolverCExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -151,10 +186,8 @@ namespace PROJECT_NAME{
                 return arr;
             }
             public static T[,] Fill<T>(this T[,] arr, T val ){
-                int len0 = arr.GetLength(0);
-                int len1 = arr.GetLength(1);
-                for(int i=0; i<len0; i++){
-                    for(int j=0; j<len1; j++){
+                for(int i=0; i<arr.GetLength(0); i++){
+                    for(int j=0; j<arr.GetLength(1); j++){
                         arr[i,j] = val;
                     }
                 }
