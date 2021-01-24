@@ -38,7 +38,6 @@ namespace ABC189{
 
                 Matrix op1 = new Matrix(new long[,] {{0,1,0},{-1,0,0},{0,0,1}});
                 Matrix op2 = new Matrix(new long[,] {{0,-1,0},{1,0,0},{0,0,1}});
-                // Matrix op3 = new Matrix(new long[,] {-1,0,2*})
                 StringBuilder answer = new StringBuilder();
 
                 for(int m=1; m<=M; m++){

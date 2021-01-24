@@ -1,5 +1,16 @@
 using System;
 namespace AtcoderLib{
+
+    // 行列ライブラリ。積を実装。
+    // 初期化の方法：
+    // var mat = new Matrix(rowSize, colSize); したあと、
+    // mat[i,j] = 0; のように各要素を代入する。
+    // または、
+    // var mat = new Matrix(new long[,] {{1,0,0},{0,1,0},{0,0,1}});
+    // のようにlong[,]型で与える。
+
+    // 積は * 演算子で行う。
+    // 要素の取得・更新はインデクサで行う。
     class Matrix{
             long[,] mat;
             public int RowNum{
