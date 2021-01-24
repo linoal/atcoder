@@ -2,30 +2,72 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ABC188.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ABC188{
+    class SolverC{
         static void Main(){
-            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
+                int N = Get.Int();
+                long[] A = Get.Longs();
+                long[] winr = Copy(A);
+                long[] winh = new long[winr.Length];
+                for(int i=0; i<winr.Length; i++){
+                    winh[i]=i+1;
+                }
+
+                // long battles = Mod.Pow(2,N)-1;
+                for(int i=0; i<N-1; i++){
+                    int bnum = winr.Length/2;
+                    var nextWinr = new long[bnum];
+                    var nextWinh = new long[bnum];
+                    // Debug.Put(winr,"winr",winh,"winh");
+                    for(int j=0; j<bnum; j++){
+                        // Debug.Put(j,"j", 2*j+1,"2*j+1");
+                        // Debug.Put(winr,"winr");
+                        if(winr[2*j] < winr[2*j+1]){
+                            nextWinr[j] = winr[2*j+1];
+                            nextWinh[j] = winh[2*j+1];
+                        }else{
+                            nextWinr[j] = winr[2*j];
+                            nextWinh[j] = winh[2*j];
+                        }
+                        
+                    }
+                    winr = nextWinr;
+                    winh = nextWinh;
+                }
                 
+                // Debug.Put(winr,"winr",winh,"winh");
+                if(winr[0] < winr[1]){
+                    WriteLine(winh[0]);
+                }else{
+                    WriteLine(winh[1]);
+                }
 
-
+                
             }
         }
+
+        static long[] Copy(long[] src){
+            long[] dst = new long[src.Length];
+            for(int i=0; i<src.Length; i++){
+                dst[i] = src[i];
+            }
+            return dst;
+        }
+
 
 
         // === ここからライブラリ
@@ -117,7 +159,8 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get{
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -143,7 +186,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverCExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

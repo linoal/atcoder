@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using PROJECT_NAME.SolverAExtensions;
 using static System.Math;
 using static System.Console;
@@ -11,6 +12,7 @@ using static System.Numerics.BitOperations;
 namespace PROJECT_NAME{
     class SolverA{
         static void Main(){
+            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             new SolverA().Solve();
             Out.Flush();
@@ -19,8 +21,7 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
-                var n = Get.Int();
-                WriteLine(n);
+                
             
             }
         }

@@ -1,31 +1,43 @@
-﻿using System;
+﻿using System.Resources;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ABC188.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ABC188{
+    class SolverB{
+
         static void Main(){
-            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            Debug.isDebugMode = false;
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                
-
+                int n = Get.Int();
+                int[] a = Get.Ints();
+                int[] b = Get.Ints();
+                long dot=0;
+                for(int i=0; i<n; i++){
+                    dot += a[i]*b[i];
+                }
+                if(dot==0){
+                    WriteLine("Yes");
+                }else{
+                    WriteLine("No");
+                }
 
             }
         }
+
 
 
         // === ここからライブラリ
@@ -116,8 +128,7 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -143,7 +154,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverBExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

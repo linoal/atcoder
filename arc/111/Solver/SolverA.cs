@@ -2,30 +2,43 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ARC111.SolverAExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ARC111{
+    class SolverA{
         static void Main(){
-            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverA().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
+                (var N, var M) = Get.Tuple<long,int>();
 
-                
+                    // long invM = 1;
+                    // while(true){
+                    //     if((invM * M)% (2*M) == 1){
+                    //         break;
+                    //     }
+                    //     Debug.Put((invM* M)%(2*M));ReadLine();
+                    //     invM++;
+                    // }
 
+                // Debug.Put(N,"N",M,"M", Mod.Pow(10,N,M), "Mod.Pow(10,N,M)");
+                WriteLine( (Mod.Pow(10,N,M*M) / M) % M );
+                // WriteLine( Floor(((double)1/(double)M) * Mod.Pow(10,N,M)+0.000000001) % M);
 
             }
         }
+
+        // static long Calc(long x, long e, long mod){
+
+        // }
 
 
         // === ここからライブラリ
@@ -45,8 +58,8 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-        
-        static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
+
+         static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
             public static bool isDebugMode = true;
             public static void Put(object obj, int padLeft = 0, bool newline = true){
                 if (!isDebugMode) return;
@@ -116,8 +129,8 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -140,10 +153,10 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
-        }
+        }  
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverAExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){
@@ -177,3 +190,4 @@ namespace PROJECT_NAME{
         }
     }
 }
+

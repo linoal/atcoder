@@ -2,19 +2,17 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ARC111.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ARC111{
+    class SolverC{
         static void Main(){
-            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
@@ -23,9 +21,10 @@ namespace PROJECT_NAME{
 
                 
 
-
+                
             }
         }
+
 
 
         // === ここからライブラリ
@@ -117,7 +116,8 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get{
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -143,7 +143,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverCExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

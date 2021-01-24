@@ -2,14 +2,13 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverFExtensions;
+using ABC189.SolverFExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC189{
     class SolverF{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});

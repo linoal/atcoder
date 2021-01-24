@@ -1,31 +1,64 @@
-﻿using System;
+﻿using System.Resources;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ARC111.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace ARC111{
+    class SolverB{
+
         static void Main(){
-            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            Debug.isDebugMode = false;
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
+                int N = Get.Int();
+                var A = new int[N];
+                var B = new int[N];
+                var dic = new Dictionary<int,int>();
+                for(int i=0; i<N; i++){
+                    (A[i],B[i]) = Get.Tuple<int,int>();
+                    DicInc(dic,A[i]);
+                    DicInc(dic,B[i]);
+                }
+                
+                var leasts = Leasts(dic);
                 
 
 
             }
         }
+
+        static void DicInc(Dictionary<int,int> dic, int key){
+            if(dic.ContainsKey(key)){
+                dic[key]++;
+            }else{
+                dic.Add(key,1);
+            }
+        }
+
+        static HashSet<int> Leasts(Dictionary<int,int> dic){
+            var ret = new HashSet<int>();
+            int leastVal = Int16.MaxValue;
+            foreach(var d in dic){
+                if(d.Value < leastVal){
+                    leastVal = d.Value;
+                    ret.Add(d.Key);
+                }
+            }
+            return ret;
+        }
+
 
 
         // === ここからライブラリ
@@ -116,8 +149,7 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -143,7 +175,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverBExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

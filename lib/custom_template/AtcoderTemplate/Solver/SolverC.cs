@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using PROJECT_NAME.SolverCExtensions;
 using static System.Math;
 using static System.Console;
@@ -11,6 +12,7 @@ using static System.Numerics.BitOperations;
 namespace PROJECT_NAME{
     class SolverC{
         static void Main(){
+            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             new SolverC().Solve();
             Out.Flush();
@@ -19,12 +21,7 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
-                (var N, var K) = Get.Tuple<int,int>();
-
-                int[] A = Get.Ints();
-                for (int i=K; i<N; i++){
-                    WriteLine(A[i-K] < A[i] ? "Yes" : "No");
-                }
+                
 
                 
             }

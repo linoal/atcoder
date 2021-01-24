@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using PROJECT_NAME.SolverBExtensions;
 using static System.Math;
 using static System.Console;
@@ -13,8 +14,8 @@ namespace PROJECT_NAME{
     class SolverB{
 
         static void Main(){
-            SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             Debug.isDebugMode = false;
+            SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             new SolverB().Solve();
             Out.Flush();
         }
@@ -22,29 +23,7 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
-                // ABC182 - B
-
-                int N = Get.Int();
-                int[] A = Get.Ints();
-                int maxGcdf=0;
-                int goodK = 0;
-                for(int a=2; a<=1000; a++){
-                    int gcdf = 0;
-                    for(int n=0; n<A.Length; n++){
-                        if(A[n]%a==0){
-                            gcdf++;
-                            // Debug.Put($"{a} is good k , gcdf is {gcdf}");
-                        }
-                    }
-                    if(gcdf >= maxGcdf){
-                        maxGcdf = gcdf;
-                        goodK = a;
-                    }
-                }
-                WriteLine(goodK);
-                Debug.Put(maxGcdf, "maxGcdf");
-                Debug.Put(new int[,] {{1,2},{3,4}});
-                Debug.Put("test");
+                
 
             }
         }

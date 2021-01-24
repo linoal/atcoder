@@ -1,0 +1,36 @@
+[Case Input]
+1 2
+
+
+[Case Expect]
+1
+
+
+
+
+
+[Case Input]
+2 7
+
+
+[Case Expect]
+0
+
+
+
+
+[Case Input]
+1000000000000000000 9997
+
+
+[Case Expect]
+9015
+
+
+
+
+
+[Case Input]
+
+
+[Case Expect]

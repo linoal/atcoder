@@ -1,0 +1,24 @@
+[Case Input]
+2
+AND
+OR
+
+[Case Expect]
+5
+
+
+
+
+[Case Input]
+5
+OR
+OR
+OR
+OR
+OR
+
+[Case Expect]
+63
+
+
+

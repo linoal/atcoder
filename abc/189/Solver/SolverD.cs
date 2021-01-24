@@ -2,14 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ABC189.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC189{
     class SolverD{
         static void Main(){
             Debug.isDebugMode = false;
@@ -21,7 +20,69 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
-                
+                int N = Get.Int();
+                bool[] S = new bool[N];
+                for(int i=0; i<N; i++){
+                    S[i] = (Get.Str() == "AND") ? true : false;
+                }
+                Debug.Put(S,"S");
+
+                long[] dp = new long[2].Fill(1);
+                for(int i=0; i<N; i++){
+                    long[] np = new long[2].Fill(0);
+                    for(int j=0; j<2; j++){
+                        for(int x=0; x<2; x++){
+                            int nj;
+                            // Debug.Put(i,"i");
+                            if(S[i]==true){
+                                nj = j & x;
+                            }else{
+                                nj = j | x;
+                            }
+                            
+                            np[nj] += dp[j];
+                        }
+                    }
+                    dp = np;
+                    Debug.Put(np,"np");
+                }
+                WriteLine(dp[1]);
+
+                // long pt = 1;
+                // for(int i=0; i<N; i++){
+                //     if(S[i] == true){
+                //         // do nothing
+                //     }else{
+                //         pt += Mod.Pow(2,i+1);
+                //     }
+                // }
+                // WriteLine(pt);
+
+                // long pt1 = 1;
+                // long pt0 = 0;
+                // for(int i=N-1; i>=0; i--){
+                //     (long _1from1, long _1from0, long _0from1, long _0from0) = (0,0,0,0);
+                //     if(S[i] == true){
+                //         _1from1 = 1;
+                //         _1from0 = 0;
+                //         _0from1 = 1;
+                //         _0from0 = 2;
+                //     }
+                //     else if(S[i] == false){
+                //         _1from1 = 2;
+                //         _1from0 = 1;
+                //         _0from1 = 0;
+                //         _0from0 = 1;
+                        
+                //     }
+                //     long newPt1 = pt1 * _1from1 + pt0 * _0from1;
+                //     long newPt0 = pt1 * _1from0 + pt0 * _0from0;
+                //     pt1 = newPt1;
+                //     pt0 = newPt0;
+                //     // Debug.Put(pt1,"pt1",pt0,"pt0");
+                // }
+
+                // WriteLine(pt1+pt0);
 
 
             }

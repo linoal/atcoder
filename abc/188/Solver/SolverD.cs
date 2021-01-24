@@ -2,17 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ABC188.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC188{
     class SolverD{
         static void Main(){
-            Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
             new SolverD().Solve();
             Out.Flush();
@@ -21,7 +19,49 @@ namespace PROJECT_NAME{
         public void Solve(){
             checked{
 
+                (var N, var C) = Get.Tuple<int,long>();
+                var a = new long[N];
+                var b = new long[N];
+                var c = new long[N];
+                for(int i=0; i<N; i++){
+                    (a[i],b[i],c[i]) = Get.Tuple<long,long,long>();
+                }
                 
+                var imos = new SortedDictionary<long,long>();
+                for(int i=0; i<N; i++){
+                    if(imos.ContainsKey(a[i])){
+                        imos[a[i]] += c[i];
+                    }else{
+                        imos.Add(a[i],c[i]);
+                    }
+                    if(imos.ContainsKey(b[i]+1)){
+                        imos[b[i]+1] -= c[i];
+                    }else{
+                        imos.Add(b[i]+1,-1 * c[i]);
+                    }
+                }
+
+                // foreach(var im in imos){
+                //     Debug.Put(im.Key,"day",im.Value,"imos");
+                // }
+
+
+                long allc = 0;
+                long day = imos.First().Key-1;
+                long imsum = 0;
+                long prevImsum = 0;
+                foreach(var im in imos){
+                    prevImsum = imsum;
+                    imsum += im.Value;
+                    if(prevImsum > C){
+                        allc += C * (im.Key - day);
+                    }else{
+                        allc += prevImsum * (im.Key - day);
+                    }
+                    day = im.Key;
+                }
+                WriteLine(allc);
+
 
 
             }
