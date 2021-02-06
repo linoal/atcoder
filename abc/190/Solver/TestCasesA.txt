@@ -1,0 +1,29 @@
+// TEST CASE DSL
+
+// Command List: [Case Input],  [Case Output],
+//               [End],         // (Comment)
+//               [Rep n] (n=any number)
+
+
+[Case Input]
+2 1 0
+
+[Case Expect]
+Takahashi
+
+
+
+
+[Case Input]
+2 2 0
+
+[Case Expect]
+Aoki
+
+
+
+[Case Input]
+2 2 1
+
+[Case Expect]
+Takahashi
