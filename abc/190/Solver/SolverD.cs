@@ -21,19 +21,20 @@ namespace ABC190{
         public void Solve(){
             checked{
                 long N = Get.Long();
+                long _2N = N * 2;
                 long ans = 0;
-                for(long i=1; i*i<=N; i++){
-                    if(N%i == 0){
-                        long a = i;
-                        long b = N/i;
-                        if(a%2==1 && a!=b){
+                for(long i=1; i*i<_2N; i++){
+                    if(_2N%i == 0){
+                        long n = i;
+                        long m = _2N/i;
+                        if(n%2 != m%2){
                             ans+=2;
                         }
-                        if(b%2==1 && a!=b){
-                            ans+=2;
-                        }else if(a==b && a%2==1){
-                            ans+=2;
-                        }
+                        // if(b%2==1 && a!=b){
+                        //     ans+=2;
+                        // }else if(a==b && a%2==1){
+                        //     ans+=2;
+                        // }
                     }
                 }
                 WriteLine(ans);

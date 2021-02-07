@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverFExtensions;
+using Practice210207.SolverFExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace Practice210207{
     class SolverF{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});

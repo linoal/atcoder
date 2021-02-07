@@ -1,0 +1,22 @@
+[Case Input]
+0.2 0.8 1.1
+
+[Case Expect]
+3
+
+
+[Case Input]
+100 100 1
+
+[Case Expect]
+5
+
+
+
+
+[Case Input]
+42782.4720 31949.0192 99999.99
+
+
+[Case Expect]
+31415920098

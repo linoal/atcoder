@@ -139,6 +139,16 @@ namespace PROJECT_NAME{
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
             }
+            public static char[,] CharMap(int H, int W){
+                var map = new char[H,W];
+                for(int i=0; i<H; i++){
+                    string line = Get.Str();
+                    for(int j=0; j<W; j++){
+                        map[i,j] = line[j];
+                    }
+                }
+                return map;
+            }
         }  
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける

@@ -1,29 +1,145 @@
-﻿using System;
+﻿using System.Reflection.Metadata.Ecma335;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using Practice210207.SolverAExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace Practice210207{
+    class SolverA{
         static void Main(){
             Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverA().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
 
-                
+                (var N, var M) = Get.Tuple<int,int>();
+                var tds = new PriorityQueue<TaskDay>(N);
+                for(int i=0; i<N; i++){
+                    (var ai, var bi) = Get.Tuple<int,int>();
+                    tds.Push( new TaskDay{a=ai,b=bi} );
+                }
+                Debug.Put(tds,"tds");
+
+                var tms = new PriorityQueue<TaskMoney>(N);
+                long money = 0;
+
+                for(int m=1; m<=M; m++){
+                    while(tds.HasValue && tds.Peek().a <= m){
+                        var td = tds.Pop();
+                        var tm = new TaskMoney{a=td.a, b=td.b};
+                        tms.Push(tm);
+                    }
+                    Debug.Put(tms,"tms");
+                    if( tms.HasValue) money += tms.Pop().b;
+                }
+                WriteLine(money);
+            
+            }
+        }
 
 
+        public class TaskDay : IComparable<TaskDay>{
+            public int a,b;
+            public int CompareTo(TaskDay task){
+                return this.a.CompareTo(task.a) * -1;
+            }
+            public override string ToString()
+            {
+                return $"a:{a}, b:{b}";
+            }
+        }
+        public class TaskMoney : IComparable<TaskMoney>{
+            public int a,b;
+            public int CompareTo(TaskMoney task){
+                return this.b.CompareTo(task.b);
+            }
+            public override string ToString()
+            {
+                return $"a:{a}, b:{b}";
+            }
+        }
+
+        // 大きいほうから取る優先度付きキュー。
+        // 要素の型TはIComparable<T>の実装が必要(CompareToを実装)。
+        public class PriorityQueue<T> where T : IComparable<T>{
+            List<T> heap;
+            public bool IsEmpty{get{return heap.Count==0;}}
+            public bool HasValue{get{return !IsEmpty;}}
+
+            public PriorityQueue(int capacity){
+                heap = new List<T>(capacity);
+            }
+            
+            public void Push(T elem){
+                int current = heap.Count;
+                heap.Add(elem);
+                while(current != 0){
+                    int parent = (current - 1) / 2;
+                    if(heap[current].CompareTo(heap[parent]) <= 0){
+                        break;
+                    }
+                    // 親と値を入れ替え
+                    SwapIndex(current, parent);
+                    current = parent;
+                }
+            }
+
+            public T Peek(){
+                if(heap.Count <= 0) throw new ArgumentOutOfRangeException("ERROR : PriorityQueue : no element to peek");
+                return heap[0];
+            }
+
+            public T Pop(){
+                if(heap.Count <= 0) throw new ArgumentOutOfRangeException("ERROR : PriorityQueue : no element to pop");
+                T pop = Peek();
+                int lastIndex = heap.Count-1;
+                heap[0] = heap[lastIndex];
+                heap.RemoveAt(lastIndex--);
+                int parent = 0;
+                while(true){
+                    int childLeft = parent * 2 + 1;
+                    if(childLeft > lastIndex) break;
+                    int childRight = childLeft + 1;
+                    int childBigger = childLeft;
+                    if(childRight <= lastIndex && heap[childRight].CompareTo(heap[childLeft]) > 0){
+                        childBigger = childRight;
+                    }
+                    if(heap[childBigger].CompareTo(heap[parent]) < 0) break;
+                    SwapIndex(childBigger, parent);
+                    parent = childBigger;
+                }
+                return pop;
+            }
+
+
+            public override string ToString(){
+                if(heap.Count <= 0) return "Empty primary queue";
+                var sb = new StringBuilder();
+                sb.Append($"(top: {Peek()} , other : ");
+                for(int i=1; i<heap.Count; i++){
+                    sb.Append($"{heap[i]}");
+                    if(i < heap.Count-1){
+                        sb.Append(", ");
+                    }
+                }
+                sb.Append(" )");
+                return sb.ToString();
+            }
+
+            private void SwapIndex(int indexA, int indexB){
+                T tmp = heap[indexA];
+                heap[indexA] = heap[indexB];
+                heap[indexB] = tmp;
             }
         }
 
@@ -45,8 +161,8 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-        
-        static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
+
+         static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
             public static bool isDebugMode = true;
             public static void Put(object obj, int padLeft = 0, bool newline = true){
                 if (!isDebugMode) return;
@@ -116,8 +232,8 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -150,10 +266,10 @@ namespace PROJECT_NAME{
                 }
                 return map;
             }
-        }
+        }  
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverAExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

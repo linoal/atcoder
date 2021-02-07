@@ -132,7 +132,7 @@ namespace PROJECT_NAME{
             static T TypeConv<T,U>(U u) => (T)Convert.ChangeType(u, typeof(T));
             static T TypeConv<T>(string s) => TypeEq<T, int>() ?   TypeConv<T, int>(int.Parse(s))
                                         : TypeEq<T, long>() ?       TypeConv<T, long>(long.Parse(s))
-                                        : TypeEq<T, double>() ?     TypeConv<T, double>(long.Parse(s))
+                                        : TypeEq<T, double>() ?     TypeConv<T, double>(double.Parse(s))
                                         : TypeConv<T, string>(s);
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
@@ -141,6 +141,16 @@ namespace PROJECT_NAME{
                 T[] ret = new T[N];
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
+            }
+            public static char[,] CharMap(int H, int W){
+                var map = new char[H,W];
+                for(int i=0; i<H; i++){
+                    string line = Get.Str();
+                    for(int j=0; j<W; j++){
+                        map[i,j] = line[j];
+                    }
+                }
+                return map;
             }
         }
     }

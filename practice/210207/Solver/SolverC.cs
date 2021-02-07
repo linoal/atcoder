@@ -3,18 +3,18 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using Practice210207.SolverCExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace Practice210207{
+    class SolverC{
         static void Main(){
             Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverC().Solve();
             Out.Flush();
         }
 
@@ -23,9 +23,10 @@ namespace PROJECT_NAME{
 
                 
 
-
+                
             }
         }
+
 
 
         // === ここからライブラリ
@@ -117,7 +118,8 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get{
+        private static class Get
+        {
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -130,7 +132,7 @@ namespace PROJECT_NAME{
             static T TypeConv<T,U>(U u) => (T)Convert.ChangeType(u, typeof(T));
             static T TypeConv<T>(string s) => TypeEq<T, int>() ?   TypeConv<T, int>(int.Parse(s))
                                         : TypeEq<T, long>() ?       TypeConv<T, long>(long.Parse(s))
-                                        : TypeEq<T, double>() ?     TypeConv<T, double>(long.Parse(s))
+                                        : TypeEq<T, double>() ?     TypeConv<T, double>(double.Parse(s))
                                         : TypeConv<T, string>(s);
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
@@ -153,7 +155,7 @@ namespace PROJECT_NAME{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverCExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

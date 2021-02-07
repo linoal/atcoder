@@ -3,25 +3,25 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using Practice210207.SolverEExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverD{
+namespace Practice210207{
+    class SolverE{
         static void Main(){
             Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverD().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-
                 
+
 
 
             }
@@ -150,10 +150,11 @@ namespace PROJECT_NAME{
                 }
                 return map;
             }
+            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverDExtensions{
+    namespace SolverEExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

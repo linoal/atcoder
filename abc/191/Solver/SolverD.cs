@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverDExtensions;
+using ABC191.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC191{
     class SolverD{
         static void Main(){
             Debug.isDebugMode = false;
@@ -20,11 +20,30 @@ namespace PROJECT_NAME{
 
         public void Solve(){
             checked{
-
-                
+                // Debug.Put("test");
+                int factor = 10000;
+                long lattice = 0;
+                long[] inputs = Get.Doubles().Select(x => (long)(Round(x*factor))).ToArray();
+                (var XF, var YF, var RF) = (inputs[0],inputs[1],inputs[2]);
+                (long xmin, long xmax) = ((XF-RF)/factor*factor, ((XF+RF)/factor+1)*factor);
+                for(long x=xmin; x<xmax; x+=factor){
+                    long hSquare = RF * RF - (XF-x) * (XF-x);
+                    if(hSquare<0) continue;
+                    double h = Sqrt(hSquare);
+                    long up = (((long)(h+YF))/factor)*factor;
+                    while(isInCircle(x,up,XF,YF,RF) || up < YF) up+=factor;
+                    long down = (((long)(h*-1+YF))/factor+1)*factor;
+                    while(isInCircle(x,down,XF,YF,RF) || down > YF) down-=factor;
+                    lattice += Max( (up - down)/factor - 1, 0);
+                }
+                WriteLine(lattice);
 
 
             }
+        }
+
+        public static bool isInCircle(long x, long y, long cx, long cy, long r){
+            return Mod.Pow(cx-x,2) + Mod.Pow(cy-y,2) <= r*r;
         }
 
 
@@ -130,7 +149,7 @@ namespace PROJECT_NAME{
             static T TypeConv<T,U>(U u) => (T)Convert.ChangeType(u, typeof(T));
             static T TypeConv<T>(string s) => TypeEq<T, int>() ?   TypeConv<T, int>(int.Parse(s))
                                         : TypeEq<T, long>() ?       TypeConv<T, long>(long.Parse(s))
-                                        : TypeEq<T, double>() ?     TypeConv<T, double>(long.Parse(s))
+                                        : TypeEq<T, double>() ?     TypeConv<T, double>(double.Parse(s))
                                         : TypeConv<T, string>(s);
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}
@@ -139,16 +158,6 @@ namespace PROJECT_NAME{
                 T[] ret = new T[N];
                 for(int i=0; i<N; i++){ ret[i] = TypeConv<T>(Str()); }
                 return ret;
-            }
-            public static char[,] CharMap(int H, int W){
-                var map = new char[H,W];
-                for(int i=0; i<H; i++){
-                    string line = Get.Str();
-                    for(int j=0; j<W; j++){
-                        map[i,j] = line[j];
-                    }
-                }
-                return map;
             }
         }
     }

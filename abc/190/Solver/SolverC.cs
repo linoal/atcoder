@@ -22,36 +22,39 @@ namespace ABC190{
             checked{
 
                 (var N, var M) = Get.Tuple<int,int>();
-                int[] A = new int[M]; int[] B = new int[M];
+                // int[] A = new int[M]; int[] B = new int[M];
+                var ms = new(int a, int b)[M];
                 for(int i=0; i<M; i++){
-                    (A[i], B[i]) = Get.Tuple<int,int>();
-                    A[i]--; B[i]--;
+                    ms[i] = Get.Tuple<int,int>();
+                    ms[i].a--; ms[i].b--;
                 }
                 // Debug.Put(A,"A", B,"B");
                 int K = Get.Int();
-                int[] C = new int[K]; int[] D = new int[K];
+                // int[] C = new int[K]; int[] D = new int[K];
+                var ks = new(int c, int d)[K];
                 for(int i=0; i<K; i++){
-                    (C[i],D[i]) = Get.Tuple<int,int>();
-                    C[i]--; D[i]--;
+                    // (C[i],D[i]) = Get.Tuple<int,int>();
+                    // C[i]--; D[i]--;
+                    ks[i] = Get.Tuple<int,int>();
+                    ks[i].c--; ks[i].d--;
                 }
 
-                long _2PowK = Mod.Pow(2,K);
+                // long _2PowK = Mod.Pow(2,K);
                 int maxCondT = 0;
-                for(uint bits = 0; bits<=_2PowK; bits++){
+                for(uint bits = 0; bits<1<<K; bits++){
                     int[] balls = new int[N].Fill(0);
-                    uint b = bits;
                     for(int k=0; k<K; k++){
-                        if((b&1) == 0){
-                            balls[C[k]]++;
-                        }else{
-                            balls[D[k]]++;
-                        }
-                        b = b>>1;
+                        // if((bits >> k & 1) == 0){
+                        //     balls[ks[k].c]++;
+                        // }else{
+                        //     balls[ks[k].d]++;
+                        // }
+                        balls[(bits >> k & 1) == 0 ? ks[k].c : ks[k].d] = 1;
                     }
 
                     int condT = 0;
                     for(int m=0; m<M; m++){
-                        if(balls[A[m]]>0 && balls[B[m]]>0){
+                        if(balls[ms[m].a]>0 && balls[ms[m].b]>0){
                             // Debug.Put(Convert.ToString(bits,2),"matched bit", A[m], "A[m]", B[m], "B[m]",m,"m",M,"M", balls, "balls");
                             condT++;
                         }
