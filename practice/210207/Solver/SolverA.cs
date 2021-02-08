@@ -28,7 +28,7 @@ namespace Practice210207{
                     (var ai, var bi) = Get.Tuple<int,int>();
                     tds.Push( new TaskDay{a=ai,b=bi} );
                 }
-                Debug.Put(tds,"tds");
+                // Debug.Put(tds,"tds");
 
                 var tms = new PriorityQueue<TaskMoney>(N);
                 long money = 0;
@@ -39,7 +39,7 @@ namespace Practice210207{
                         var tm = new TaskMoney{a=td.a, b=td.b};
                         tms.Push(tm);
                     }
-                    Debug.Put(tms,"tms");
+                    // Debug.Put(tms,"tms");
                     if( tms.HasValue) money += tms.Pop().b;
                 }
                 WriteLine(money);

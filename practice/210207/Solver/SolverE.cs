@@ -18,13 +18,33 @@ namespace Practice210207{
             Out.Flush();
         }
 
+        char[,] m;
+        int H,W;
         public void Solve(){
             checked{
-                
+                (H, W) = Get.Tuple<int,int>();
+                m = Get.CharMap(H,W);
+                int x=-1,y=-1;
+                for(int i=0; i<H; i++){
+                    for(int j=0; j<W; j++){
+                        if(m[i,j]=='s'){
+                            (y,x) = (i,j);
+                            break;
+                        }
+                    }
+                }
+                WriteLine(dfs(y,x) ? "Yes" : "No");
 
 
 
             }
+        }
+
+        bool dfs(int y, int x){
+            if(y<0 || y>=H || x<0 || x>=W || m[y,x]=='#' || m[y,x]=='@') return false;
+            if(m[y,x]=='g') return true;
+            m[y,x] = '@';
+            return dfs(y-1,x) | dfs(y+1,x) | dfs(y,x-1) | dfs(y,x+1);
         }
 
 

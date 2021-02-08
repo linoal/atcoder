@@ -85,7 +85,7 @@ namespace PROJECT_NAME
                     strs[i] = "";
                 }
             }
-            return String.Join("",strs);
+            return String.Join("\n",strs);
         }
 
         static string ReadTestCaseInput(int caseNum, string fileName)

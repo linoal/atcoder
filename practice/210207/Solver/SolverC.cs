@@ -21,9 +21,225 @@ namespace Practice210207{
         public void Solve(){
             checked{
 
+                (var N, var M) = Get.Tuple<int,int>();
+                var g = new Graph(N,M);
+                // var gInv = new Graph(N,M);
+                var sameCs = new long[N].Fill(long.MaxValue);
+                for(int i=0; i<M; i++){
+                    (var a, var b, var c) = Get.Tuple<int,int,int>();
+                    a--;b--;
+                    if(a==b){
+                        sameCs[a] = Min(sameCs[a], c);
+                        continue;
+                    }
+                    g.AddEdge(a,b,c);
+                    // gInv.AddEdge(b,a,c);
+
+                }
+                Debug.Put(g, "graph");
+
+                var d = new long[N][];
+                for(int i=0; i<N; i++){
+                    var goC = g.Dijkstra(i);
+                    // var backC = gInv.Dijkstra(i);
+                    d[i] = goC;
+                }
+
+                Debug.Put(d, "cost");
+
+                for(int i=0; i<N; i++){
+                    long cost = sameCs[i];
+                    for(int j=0; j<N; j++){
+                        if(i==j) continue;
+                        if(d[i][j]==long.MaxValue || d[j][i]==long.MaxValue) continue;
+                        cost = Min(cost, d[i][j]+d[j][i]);
+                    }
+                    if(cost==long.MaxValue) WriteLine("-1");
+                    else WriteLine(cost);
+                }
+
                 
 
                 
+            }
+        }
+
+
+        public class Graph{
+            public Vert[] verts; // 各Vertは、そこから出るEdgeのリストを持っている。
+            public List<Edge> edges; // 各Edgeはfrom,to,costを持っている
+
+            public Graph(int vertsNum, int edgesCapacity){
+                verts = new Vert[vertsNum];
+                edges = new List<Edge>(edgesCapacity);
+                for(int i=0; i<vertsNum; i++){
+                    verts[i] = new Vert(i, edgesCapacity);
+                }
+            }
+
+            // サブクラス ここから
+            public class Vert{
+                public int id; // このidはGraphのverts[]のindexと一致することが前提。
+                public List<Edge> adjEdges; // この頂点から出ている道。来る道ではない。
+                public Vert(int argId, int edgesCapacity){
+                    adjEdges = new List<Edge>(edgesCapacity);
+                    id = argId;
+                }
+                public void AddAdjEdge(Edge edge){
+                    adjEdges.Add(edge);
+                }
+                
+            }
+            public class Edge{
+                public Vert from, to;
+                public long cost; // その辺の重み
+                public Edge(Vert argFrom, Vert argTo, long argCost){
+                    (from, to, cost) = (argFrom, argTo, argCost);
+                }
+                public override string ToString(){
+                    return $"(to {to.id}, cost {cost})";
+                }
+            }
+
+            // ダイクストラで探索する用の頂点データ構造
+            class VertForDijkstra : IComparable<VertForDijkstra>{
+                public int id;
+                public long cost;
+                public int CompareTo(VertForDijkstra other){
+                    // コストの小さいほうから処理したいのでそのように並び順を定義する
+                    return cost.CompareTo(other.cost) * -1;
+                }
+            }
+            // サブクラス ここまで
+
+            public void AddEdge(int idFrom, int idTo, long cost){
+                if(idFrom >= verts.Length || idTo >= verts.Length){
+                    throw new IndexOutOfRangeException($"[[ vertのindexは0から{verts.Length-1}までですが、範囲外のindexが渡されました。idFrom:{idFrom}, idTo:{idTo} ]]");
+                }
+                Edge newEdge = new Edge(verts[idFrom], verts[idTo], cost);
+                edges.Add(newEdge);
+                verts[idFrom].AddAdjEdge(newEdge);
+            }
+
+            // ダイクストラ法により最短経路のコストを求める。
+            // 注意 : 経路がない場合は ret[i] = long.MaxValue になる。
+            // 戻り値 : ret[i] = 始点から頂点iまでの最短経路のコスト
+            public long[] Dijkstra(int startVertId){
+                // 初期化
+                var costs = new long[verts.Length];
+                for(int i=0; i<costs.Length; i++){
+                    costs[i] = long.MaxValue;
+                }
+                costs[startVertId] = 0;
+                var que = new PriorityQueue<VertForDijkstra>(verts.Length);
+                que.Push(new VertForDijkstra{id = startVertId, cost = 0});
+                // 探索
+                while(que.HasValue){
+                    var vert = que.Pop();
+                    var id = vert.id;
+                    // 記録されているコストと異なるときは無視（Queueにいる間により効率的な経路が見つかったということ）
+                    if(vert.cost != costs[id]) continue;
+                    // 注目頂点から繋がっている箇所を見る
+                    foreach(var edge in verts[id].adjEdges){
+                        var dstId = edge.to.id;
+                        long dstCost = costs[id] + edge.cost;
+                        if(dstCost < costs[dstId]){
+                            costs[dstId] = dstCost;
+                            que.Push(new VertForDijkstra{id = dstId, cost = dstCost});
+                        }
+                    }
+                }
+                return costs;
+            }
+
+            public override string ToString(){
+                var sb = new StringBuilder();
+                sb.Append("Graph :\n");
+                sb.Append("    Verts :\n");
+                for(int i=0; i<verts.Length; i++){
+                    sb.Append($"        {i} : Edges : {{ ");
+                    foreach(var edge in verts[i].adjEdges){
+                        sb.Append($"{edge} , ");
+                    }
+                    sb.Remove(sb.Length-3,2); // 最後の", "を削除
+                    sb.Append("}\n");
+                }
+                return sb.ToString();
+            }
+        }
+        // Graph ここまで
+
+
+
+        public class PriorityQueue<T> where T : IComparable<T>{
+            List<T> heap;
+            public bool IsEmpty{get{return heap.Count==0;}}
+            public bool HasValue{get{return !IsEmpty;}}
+
+            public PriorityQueue(int capacity){
+                heap = new List<T>(capacity);
+            }
+            
+            public void Push(T elem){
+                int current = heap.Count;
+                heap.Add(elem);
+                while(current != 0){
+                    int parent = (current - 1) / 2;
+                    if(heap[current].CompareTo(heap[parent]) <= 0){
+                        break;
+                    }
+                    // 親と値を入れ替え
+                    SwapIndex(current, parent);
+                    current = parent;
+                }
+            }
+
+            public T Peek(){
+                if(heap.Count <= 0) throw new ArgumentOutOfRangeException("ERROR : PriorityQueue : no element to peek");
+                return heap[0];
+            }
+
+            public T Pop(){
+                if(heap.Count <= 0) throw new ArgumentOutOfRangeException("ERROR : PriorityQueue : no element to pop");
+                T pop = Peek();
+                int lastIndex = heap.Count-1;
+                heap[0] = heap[lastIndex];
+                heap.RemoveAt(lastIndex--);
+                int parent = 0;
+                while(true){
+                    int childLeft = parent * 2 + 1;
+                    if(childLeft > lastIndex) break;
+                    int childRight = childLeft + 1;
+                    int childBigger = childLeft;
+                    if(childRight <= lastIndex && heap[childRight].CompareTo(heap[childLeft]) > 0){
+                        childBigger = childRight;
+                    }
+                    if(heap[childBigger].CompareTo(heap[parent]) < 0) break;
+                    SwapIndex(childBigger, parent);
+                    parent = childBigger;
+                }
+                return pop;
+            }
+
+
+            public override string ToString(){
+                if(heap.Count <= 0) return "Empty primary queue";
+                var sb = new StringBuilder();
+                sb.Append($"(top: {Peek()} , other : ");
+                for(int i=1; i<heap.Count; i++){
+                    sb.Append($"{heap[i]}");
+                    if(i < heap.Count-1){
+                        sb.Append(", ");
+                    }
+                }
+                sb.Append(" )");
+                return sb.ToString();
+            }
+
+            private void SwapIndex(int indexA, int indexB){
+                T tmp = heap[indexA];
+                heap[indexA] = heap[indexB];
+                heap[indexB] = tmp;
             }
         }
 

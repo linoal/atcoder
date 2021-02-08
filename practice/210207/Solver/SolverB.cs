@@ -67,7 +67,7 @@ namespace Practice210207{
                 }
             }
 
-
+            // サブクラス ここから
             public class Vert{
                 public int id; // このidはGraphのverts[]のindexと一致することが前提。
                 public List<Edge> adjEdges; // この頂点から出ている道。来る道ではない。
@@ -100,6 +100,7 @@ namespace Practice210207{
                     return cost.CompareTo(other.cost) * -1;
                 }
             }
+            // サブクラス ここまで
 
             public void AddEdge(int idFrom, int idTo, long cost){
                 if(idFrom >= verts.Length || idTo >= verts.Length){
@@ -156,6 +157,7 @@ namespace Practice210207{
                 return sb.ToString();
             }
         }
+        // Graph ここまで
 
 
 

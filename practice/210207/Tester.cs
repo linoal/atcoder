@@ -53,7 +53,9 @@ namespace Practice210207
                 var actual_withoutDebug = RemoveColoredLine(actual_withDebug).Trim();
                 var isCorrect = actual_withoutDebug == caseExpect;
                 
-                SetOut(savedConsoleOut); // ここから上の Console.Out はテスト対象への入力になるので標準出力には表示されない
+                
+                // 注: ⇑ここから上の Console.Out はテスト対象への入力になるので標準出力には表示されない
+                SetOut(savedConsoleOut); 
                 // 標準出力にテスト結果を出力
                 WriteLine($"\u001b[36m[{caseNum}]------------------------------------------");
                 if (caseExpect.Count(c => c == '\n') > 0) // 複数行か否かで表示形式を切り替えたほうが綺麗
@@ -74,6 +76,7 @@ namespace Practice210207
                 // WriteLine($"expected: \"{caseExpect}\", actual: \"{actual}\"");
                 Write(isCorrect ? "\u001b[36m\u001b[1mPASSED\u001b[0m" : "\u001b[33mFAILED\u001b[0m");
                 WriteLine($"\t\u001b[36mtime: {stopwatch.ElapsedMilliseconds}ms \u001b[0m");
+                // WriteLine($"EXPECTED:{caseExpect}\nACTUAL:{actual_withDebug}\nACTUAL_WO_DEBUG:{actual_withoutDebug}");
                 return isCorrect;
             }
         }
@@ -85,7 +88,7 @@ namespace Practice210207
                     strs[i] = "";
                 }
             }
-            return String.Join("",strs);
+            return String.Join("\n",strs);
         }
 
         static string ReadTestCaseInput(int caseNum, string fileName)

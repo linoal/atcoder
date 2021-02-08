@@ -18,13 +18,35 @@ namespace Practice210207{
             Out.Flush();
         }
 
+        int A,B,C;
+        int[] Ls;
+        int N;
         public void Solve(){
             checked{
-
-                
+                var inputs = Get.Ints();
+                N = inputs[0];
+                (A,B,C) = (inputs[1], inputs[2], inputs[3]);
+                Ls = Get.Lines<int>(N);
+                WriteLine(dfs(0,0,0,0));
 
 
             }
+
+        }
+
+        int dfs(int cur, int a, int b, int c){
+            if(cur==N){
+                if(new int[]{a,b,c}.Min() > 0){
+                    return Abs(A-a)+Abs(B-b)+Abs(C-c)-30;
+                }else{ return 99999999;}
+                
+            }
+            
+            int mpA = dfs(cur+1, a+Ls[cur], b, c) + 10;
+            int mpB = dfs(cur+1, a, b+Ls[cur], c) + 10;
+            int mpC = dfs(cur+1, a, b, c+Ls[cur]) + 10;
+            int mpN = dfs(cur+1, a, b, c);
+            return new int[]{mpA,mpB,mpC,mpN}.Min();
         }
 
 
