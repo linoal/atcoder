@@ -71,6 +71,7 @@ namespace Practice210207{
 
         // 大きいほうから取る優先度付きキュー。
         // 要素の型TはIComparable<T>の実装が必要(CompareToを実装)。
+        // Push(),Pop()の計算量はO(logN)。
         public class PriorityQueue<T> where T : IComparable<T>{
             List<T> heap;
             public bool IsEmpty{get{return heap.Count==0;}}

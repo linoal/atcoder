@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AtcoderLib{
-    // 大きいほうから取る優先度付きキュー。
+        // 大きいほうから取る優先度付きキュー。
         // 要素の型TはIComparable<T>の実装が必要(CompareToを実装)。
+        // 逆順（小さい方から取る）にしたい場合は TのCompareToの戻り地に-1を掛ければOK。
         // Push(),Pop()の計算量はO(logN)。
         public class PriorityQueue<T> where T : IComparable<T>{
             List<T> heap;

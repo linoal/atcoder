@@ -43,7 +43,11 @@ namespace Practice210207
                 SetOut(output);
                 SetIn(input);
                 var stopwatch = Stopwatch.StartNew();
-                targetAct();
+                try{
+                    targetAct(); // ここでテスト対象のメソッドを実行
+                }catch(Exception e){
+                    WriteLine(e.ToString());
+                }
                 stopwatch.Stop();
                 var actual_withDebug = output.ToString().Trim();
                 var actual_withoutDebug = RemoveColoredLine(actual_withDebug).Trim();
@@ -146,6 +150,10 @@ namespace Practice210207
                 }
             }
             return sb.ToString().Trim();
+        }
+
+        static string Magenta(string s){
+            return $"\u001b[35m{s}\u001b[0m";
         }
 
         
