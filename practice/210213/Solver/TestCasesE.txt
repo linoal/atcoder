@@ -1,0 +1,21 @@
+[Case Input]
+4 5
+4 2
+5 2
+2 1
+8 3
+
+[Case Expect]
+13
+
+
+
+
+[Case Input]
+2 20
+5 9
+4 10
+
+[Case Expect]
+9
+

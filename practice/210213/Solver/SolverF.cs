@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using Practice210207.SolverFExtensions;
+using Practice210213.SolverFExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace Practice210207{
+namespace Practice210213{
     class SolverF{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
@@ -17,38 +17,15 @@ namespace Practice210207{
             Out.Flush();
         }
 
-        int X,Y,Z,K;
-        long[] A,B,C;
-
         public void Solve(){
             checked{
-                (var X, var Y, var Z, var K) = Get.Tuple<int,int,int,int>();
-                A = Get.Longs(); B = Get.Longs(); C = Get.Longs();
-                Array.Sort(A); Array.Reverse(A);
-                Array.Sort(B); Array.Reverse(B);
-                Array.Sort(C); Array.Reverse(C);
-
-                var scores = new List<long>();
                 
-                for(int a=0; a<X; a++){
-                    for(int b=0; b<Y; b++){
-                        for(int c=0; c<Z; c++){
-                            if(a*b*c>K)break;
-                            scores.Add(A[a]+B[b]+C[c]);
-                        }
-                    }
-                }
-                scores.Sort(); scores.Reverse();
-                for(int i=0; i<K; i++){
-                    WriteLine(scores[i]);
-                }
-
-
 
 
 
             }
         }
+
 
         // === ここからライブラリ
         static class Mod{
