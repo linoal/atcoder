@@ -23,34 +23,51 @@ namespace ARC112{
         public void Solve(){
             checked{
                 (var B, var C) = Get.Tuple<long,long>();
-                long ans = 1;
-                if(C>=1 && B!=0) ans++;
+                long Bmin = B - C/2;
+                long Bmax = B + (C-2)/2;
+                long minusBmin = -B - (C-1)/2;
+                long minusBmax = -B + (C-1)/2;
 
-                if(B>0){
-                    long up = (C-1)/2;
-                    long numUp = 2 * up - (C%2);
-                    numUp = Max(numUp,0);
-                    // long downCost = Min(C,2*B);
-                    long down = C/2;
-                    // long numDown = Min(2*down - ((Max(C,1)-1)%2), Max(2*B-1,0));
-                    long numDown = 2*down-((C+1)%2);
-                    numDown = Min(Max(numDown,0), Max(2*B-1,0));
-                    // Debug.Put(numDown, "numDown", numUp,"numUp");
-                    ans += numUp + numDown;
-                    WriteLine(ans);
-                    return;
-                }else{
-                    long up = C/2;
-                    long numUp = 2 * up - ((C+1)%2);
-                    numUp = Max(numUp,0);
-                    long down = (C-1)/2;
-                    long numDown = 2*down-(C%2);
-                    numDown = Min(Max(numDown,0), Max(-2*B-1,0));
-                    ans += numUp + numDown;
-                    // Debug.Put(numDown, "numDown", down, "down", numUp, "numUp");
-                    WriteLine(ans);
-                    return;
+                long intersect = 0;
+                long a = minusBmin; long b = minusBmax; long c = Bmin; long d = Bmax;
+                if(a<=c && c<=b && b<=d ){
+                    intersect = Max(minusBmax - Bmin + 1, 0);
+                }else if(c<=a && a<=d && d<=b){
+                    intersect = Max(Bmax - minusBmin + 1, 0);
                 }
+
+                long ans = Bmax - Bmin + 1 + minusBmax - minusBmin + 1 - intersect;
+                WriteLine(ans);
+                Debug.Put(Bmin, "Bmin", Bmax, "Bmax" , minusBmin, "minusBmin", minusBmax, "minusBmax", intersect, "intersect" );
+
+                // long ans = 1;
+                // if(C>=1 && B!=0) ans++;
+
+                // if(B>0){
+                //     long up = (C-1)/2;
+                //     long numUp = 2 * up - (C%2);
+                //     numUp = Max(numUp,0);
+                //     // long downCost = Min(C,2*B);
+                //     long down = C/2;
+                //     // long numDown = Min(2*down - ((Max(C,1)-1)%2), Max(2*B-1,0));
+                //     long numDown = 2*down-((C+1)%2);
+                //     numDown = Min(Max(numDown,0), Max(2*B-1,0));
+                //     // Debug.Put(numDown, "numDown", numUp,"numUp");
+                //     ans += numUp + numDown;
+                //     WriteLine(ans);
+                //     return;
+                // }else{
+                //     long up = C/2;
+                //     long numUp = 2 * up - ((C+1)%2);
+                //     numUp = Max(numUp,0);
+                //     long down = (C-1)/2;
+                //     long numDown = 2*down-(C%2);
+                //     numDown = Min(Max(numDown,0), Max(-2*B-1,0));
+                //     ans += numUp + numDown;
+                //     // Debug.Put(numDown, "numDown", down, "down", numUp, "numUp");
+                //     WriteLine(ans);
+                //     return;
+                // }
                 
                 
 

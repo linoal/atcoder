@@ -11,6 +11,7 @@ namespace AtcoderLib{
             List<T> heap;
             public bool IsEmpty{get{return heap.Count==0;}}
             public bool HasValue{get{return !IsEmpty;}}
+            public int Count{get{return heap.Count;}}
 
             public PriorityQueue(int capacity){
                 heap = new List<T>(capacity);
