@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverBExtensions;
+using ABC199.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC199{
     class SolverB{
 
         static void Main(){
@@ -22,7 +22,24 @@ namespace PROJECT_NAME{
 
         public void Solve(){
             checked{
+                int N = Get.Int();
+                int[] A = Get.Ints();
+                int[] B = Get.Ints();
 
+                int Amax = 1;
+                int Bmin = 1000;
+                for(int i=0; i<N; i++){
+                    if(Amax < A[i] ){
+                        Amax = A[i];
+                    }
+                    if(Bmin > B[i]){
+                        Bmin = B[i];
+                    }
+                }
+
+                int ans = Bmin - Amax + 1;
+                ans = Max(ans, 0);
+                WriteLine(ans);
                 
 
             }
@@ -85,10 +102,6 @@ namespace PROJECT_NAME{
                     foreach(var pair in dic){
                         Write(Green($"{pair.Key}=>{pair.Value}, "));
                     }
-                }else if( obj is System.Collections.IEnumerable ie){
-                    Write(Green("{ "));
-                    foreach(var e in ie){ Put(e,0,false); Write(Green(",")); }
-                    Write(Green(" }"));
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -122,8 +135,7 @@ namespace PROJECT_NAME{
             }
         }
 
-        
-        private static class Get{
+        static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());

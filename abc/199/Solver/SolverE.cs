@@ -1,33 +1,31 @@
-﻿using System.Resources;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverBExtensions;
+using ABC199.SolverEExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
-    class SolverB{
-
+namespace ABC199{
+    class SolverE{
         static void Main(){
             Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverB().Solve();
+            new SolverE().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-
                 
+
+
 
             }
         }
-
 
 
         // === ここからライブラリ
@@ -85,10 +83,6 @@ namespace PROJECT_NAME{
                     foreach(var pair in dic){
                         Write(Green($"{pair.Key}=>{pair.Value}, "));
                     }
-                }else if( obj is System.Collections.IEnumerable ie){
-                    Write(Green("{ "));
-                    foreach(var e in ie){ Put(e,0,false); Write(Green(",")); }
-                    Write(Green(" }"));
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -156,10 +150,11 @@ namespace PROJECT_NAME{
                 }
                 return map;
             }
+            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverBExtensions{
+    namespace SolverEExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

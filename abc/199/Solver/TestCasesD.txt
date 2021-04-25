@@ -1,0 +1,42 @@
+[Case Input]
+3 3
+1 2
+2 3
+3 1
+
+[Case Expect]
+6
+
+
+
+
+[Case Input]
+3 0
+
+[Case Expect]
+27
+
+
+
+
+[Case Input]
+4 6
+1 2
+2 3
+3 4
+2 4
+1 3
+1 4
+
+
+[Case Expect]
+0
+
+
+[Case Input]
+20 0
+
+
+
+[Case Expect]
+3486784401

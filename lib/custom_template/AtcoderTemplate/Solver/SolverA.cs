@@ -27,7 +27,7 @@ namespace PROJECT_NAME{
         }
 
 
-        // === ここからライブラリ
+               // === ここからライブラリ
         static class Mod{
             public static long Pow(long x, long e, long mod = long.MaxValue){
                 long res = 1;
@@ -44,8 +44,8 @@ namespace PROJECT_NAME{
                 return Pow(a, mod-2, mod);
             }
         }
-
-         static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
+        
+        static class Debug{ // Debug用の出力は、各行に色付きの部分が必要。でないとTesterが本出力とDebug用出力の見分けが付かずに誤判定する。
             public static bool isDebugMode = true;
             public static void Put(object obj, int padLeft = 0, bool newline = true){
                 if (!isDebugMode) return;
@@ -82,6 +82,10 @@ namespace PROJECT_NAME{
                     foreach(var pair in dic){
                         Write(Green($"{pair.Key}=>{pair.Value}, "));
                     }
+                }else if( obj is System.Collections.IEnumerable ie){
+                    Write(Green("{ "));
+                    foreach(var e in ie){ Put(e,0,false); Write(Green(",")); }
+                    Write(Green(" }"));
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -115,8 +119,8 @@ namespace PROJECT_NAME{
             }
         }
 
-
-        static class Get{
+        
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -149,7 +153,7 @@ namespace PROJECT_NAME{
                 }
                 return map;
             }
-        }  
+        }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
     namespace SolverAExtensions{

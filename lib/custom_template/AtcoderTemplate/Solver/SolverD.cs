@@ -28,7 +28,7 @@ namespace PROJECT_NAME{
         }
 
 
-        // === ここからライブラリ
+       // === ここからライブラリ
         static class Mod{
             public static long Pow(long x, long e, long mod = long.MaxValue){
                 long res = 1;
@@ -83,6 +83,10 @@ namespace PROJECT_NAME{
                     foreach(var pair in dic){
                         Write(Green($"{pair.Key}=>{pair.Value}, "));
                     }
+                }else if( obj is System.Collections.IEnumerable ie){
+                    Write(Green("{ "));
+                    foreach(var e in ie){ Put(e,0,false); Write(Green(",")); }
+                    Write(Green(" }"));
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));

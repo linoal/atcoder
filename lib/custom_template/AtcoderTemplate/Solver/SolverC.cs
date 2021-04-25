@@ -84,6 +84,10 @@ namespace PROJECT_NAME{
                     foreach(var pair in dic){
                         Write(Green($"{pair.Key}=>{pair.Value}, "));
                     }
+                }else if( obj is System.Collections.IEnumerable ie){
+                    Write(Green("{ "));
+                    foreach(var e in ie){ Put(e,0,false); Write(Green(",")); }
+                    Write(Green(" }"));
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -118,8 +122,7 @@ namespace PROJECT_NAME{
         }
 
         
-        private static class Get
-        {
+        private static class Get{
             public static string Str() => ReadLine().Trim();
             public static int Int() => int.Parse(Str());
             public static long Long() => long.Parse(Str());
@@ -132,7 +135,7 @@ namespace PROJECT_NAME{
             static T TypeConv<T,U>(U u) => (T)Convert.ChangeType(u, typeof(T));
             static T TypeConv<T>(string s) => TypeEq<T, int>() ?   TypeConv<T, int>(int.Parse(s))
                                         : TypeEq<T, long>() ?       TypeConv<T, long>(long.Parse(s))
-                                        : TypeEq<T, double>() ?     TypeConv<T, double>(double.Parse(s))
+                                        : TypeEq<T, double>() ?     TypeConv<T, double>(long.Parse(s))
                                         : TypeConv<T, string>(s);
             public static (T,U) Tuple<T,U>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); return(t,u);}
             public static (T,U,V) Tuple<T,U,V>() {string[] strs = Strs(); T t = TypeConv<T>(strs[0]); U u = TypeConv<U>(strs[1]); V v = TypeConv<V>(strs[2]); return(t,u,v);}

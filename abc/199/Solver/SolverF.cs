@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using PROJECT_NAME.SolverFExtensions;
+using ABC199.SolverFExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace PROJECT_NAME{
+namespace ABC199{
     class SolverF{
         static void Main(){
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
@@ -82,10 +82,6 @@ namespace PROJECT_NAME{
                     foreach(var pair in dic){
                         Write(Green($"{pair.Key}=>{pair.Value}, "));
                     }
-                }else if( obj is System.Collections.IEnumerable ie){
-                    Write(Green("{ "));
-                    foreach(var e in ie){ Put(e,0,false); Write(Green(",")); }
-                    Write(Green(" }"));
                 }
                 else{
                     Write(Green(obj.ToString().PadLeft(padLeft)));
@@ -153,6 +149,7 @@ namespace PROJECT_NAME{
                 }
                 return map;
             }
+            
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
