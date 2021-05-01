@@ -1,0 +1,35 @@
+// TEST CASE DSL
+
+// Command List: [Case Input],  [Case Output],
+//               [End],         // (Comment)
+//               [Rep n] (n=any number)
+
+
+[Case Input]
+abcdZONefghi
+
+[Case Expect]
+1
+
+
+
+
+[Case Input]
+ZONeZoNeZONe
+
+[Case Expect]
+2
+
+
+
+[Case Input]
+helloAtZoner
+
+[Case Expect]
+0
+
+[Case Input]
+ZONZONeZONe
+
+[Case Expect]
+2

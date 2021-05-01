@@ -1,0 +1,16 @@
+[Case Input]
+ozRnonnoe
+
+[Case Expect]
+zone
+
+
+
+
+[Case Input]
+hellospaceRhellospace
+
+[Case Expect]
+
+
+
