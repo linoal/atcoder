@@ -3,88 +3,32 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using ZONe2021.SolverCExtensions;
+using ZONe2021R2.SolverDExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace ZONe2021{
-    class SolverC{
+namespace ZONe2021R2{
+    class SolverD{
         static void Main(){
             Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverC().Solve();
+            new SolverD().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-                int N = Get.Int();
-                var T = new int[N,5];
-                for(int i=0; i<N; i++){
-                    var t = Get.Ints();
-                    for(int j=0; j<5; j++){
-                        T[i,j] = t[j];
-                    }
-                }
-
-                int u = int.MaxValue;
-                int d = 0;
-                while(d+1!=u){
-                    int m = (d+u)/2;
-                    if(Check(m,T)){
-                        d = m;
-                    }else{
-                        u = m;
-                    }
-                }
-                WriteLine(d);
 
                 
+
+
             }
         }
 
-        public bool Check(int s, int[,] T){
-            int l0 = T.GetLength(0); int l1 = T.GetLength(1);
-            var t = new int[l0, l1];
-            for(int i=0; i<l0; i++){
-                for(int j=0; j<l1; j++){
-                    t[i,j] = T[i,j] >= s ? 1 : 0;
-                }
-            }
 
-            var cntmsk = new int[1<<5].Fill(0);
-            // Debug.Put($"{Convert.ToString(cntmsk.Length,2)}");
-            for(int i=0; i<l0; i++){
-                int mask = 0;
-                for(int j=0; j<5; j++){
-                    mask += t[i,j];
-                    mask <<= 1;
-                }
-                mask >>= 1;
-                // Debug.Put($"{Convert.ToString(mask,2)}");
-                cntmsk[mask]++;
-            }
-            
-            int lmsk = cntmsk.Length;
-            for(int i=0; i<lmsk; i++){
-                for(int j=0; j<lmsk; j++){
-                    for(int k=0; k<lmsk; k++){
-                        if((i|j|k) == (1<<5)-1 && cntmsk[i]>0 && cntmsk[j]>0 && cntmsk[k]>0){
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-
-
-        }
-
-
-
-        // === ここからライブラリ
+       // === ここからライブラリ
         static class Mod{
             public static long Pow(long x, long e, long mod = long.MaxValue){
                 long res = 1;
@@ -213,7 +157,7 @@ namespace ZONe2021{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverCExtensions{
+    namespace SolverDExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

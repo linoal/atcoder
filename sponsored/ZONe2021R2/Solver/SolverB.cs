@@ -1,85 +1,69 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
+using System.Resources;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using ZONe2021.SolverCExtensions;
+using ZONe2021R2.SolverBExtensions;
 using static System.Math;
 using static System.Console;
 using static System.Linq.Enumerable;
 using static System.Numerics.BitOperations;
 
-namespace ZONe2021{
-    class SolverC{
+namespace ZONe2021R2{
+    class SolverB{
+
         static void Main(){
             Debug.isDebugMode = false;
             SetOut(new StreamWriter(Console.OpenStandardOutput()){AutoFlush = false});
-            new SolverC().Solve();
+            new SolverB().Solve();
             Out.Flush();
         }
 
         public void Solve(){
             checked{
-                int N = Get.Int();
-                var T = new int[N,5];
-                for(int i=0; i<N; i++){
-                    var t = Get.Ints();
-                    for(int j=0; j<5; j++){
-                        T[i,j] = t[j];
-                    }
-                }
-
-                int u = int.MaxValue;
-                int d = 0;
-                while(d+1!=u){
-                    int m = (d+u)/2;
-                    if(Check(m,T)){
-                        d = m;
-                    }else{
-                        u = m;
-                    }
-                }
-                WriteLine(d);
-
+                string inputStr = @"2 3 2 5 6 6 7 4 6 2 4 4 14 8 1 9 15 17 5 19
+2 2 2 7 7 1 8 6 15 11 4 15 17 26 9 7 21 4 13 10
+4 3 2 1 16 4 8 15 26 9 19 11 31 29 9 38 24 27 21 34
+3 6 12 8 1 4 23 6 7 26 38 47 36 19 45 28 40 33 9 19
+3 5 1 15 5 3 10 20 6 19 15 33 19 27 41 12 66 59 33 35
+7 10 10 13 30 2 42 3 55 54 4 51 67 39 59 10 30 2 25 73
+4 6 14 16 2 5 48 53 45 62 32 19 26 18 95 63 112 99 112 48
+6 5 10 10 11 26 24 55 64 30 65 87 57 60 110 28 127 17 50 78
+7 2 12 1 40 22 5 27 58 16 31 15 92 63 128 5 95 159 100 161
+6 16 23 28 13 14 5 30 40 70 95 6 32 58 109 138 31 131 110 106
+2 18 12 42 40 35 72 48 33 12 112 63 122 9 118 115 187 17 164 34
+2 20 32 20 58 56 65 95 80 112 123 24 100 110 1 125 29 70 150 211
+7 17 30 10 63 69 43 41 5 84 47 124 21 60 109 65 37 97 57 258
+5 20 36 30 64 62 95 112 84 93 6 68 8 106 138 69 197 133 133 106
+14 16 7 53 28 47 52 55 7 38 143 17 62 104 61 199 235 124 166 280
+16 3 36 51 16 38 45 46 9 24 75 87 94 127 73 50 229 38 132 234
+4 12 27 25 46 61 118 55 145 80 157 129 158 218 106 185 286 64 45 147
+5 30 13 12 24 25 52 84 157 131 78 177 89 158 96 121 293 306 324 188
+9 2 7 8 52 78 107 148 49 105 192 104 116 252 202 96 227 258 211 367
+12 10 41 48 4 87 107 102 28 143 24 99 8 234 171 34 72 320 33 295";
                 
-            }
-        }
-
-        public bool Check(int s, int[,] T){
-            int l0 = T.GetLength(0); int l1 = T.GetLength(1);
-            var t = new int[l0, l1];
-            for(int i=0; i<l0; i++){
-                for(int j=0; j<l1; j++){
-                    t[i,j] = T[i,j] >= s ? 1 : 0;
-                }
-            }
-
-            var cntmsk = new int[1<<5].Fill(0);
-            // Debug.Put($"{Convert.ToString(cntmsk.Length,2)}");
-            for(int i=0; i<l0; i++){
-                int mask = 0;
-                for(int j=0; j<5; j++){
-                    mask += t[i,j];
-                    mask <<= 1;
-                }
-                mask >>= 1;
-                // Debug.Put($"{Convert.ToString(mask,2)}");
-                cntmsk[mask]++;
-            }
-            
-            int lmsk = cntmsk.Length;
-            for(int i=0; i<lmsk; i++){
-                for(int j=0; j<lmsk; j++){
-                    for(int k=0; k<lmsk; k++){
-                        if((i|j|k) == (1<<5)-1 && cntmsk[i]>0 && cntmsk[j]>0 && cntmsk[k]>0){
-                            return true;
+                var s = Regex.Split(inputStr, @"\n|\s").Where(s => s != "");
+                Debug.Put(s, "s");
+                var ns = s.Select(s => Convert.ToInt32(s)).ToArray();
+                int ans = 0;
+                foreach(var n in ns){
+                    bool isPrime = true;
+                    if(n<=1) continue;
+                    for(int i=2; i*i<=n; i++){
+                        if(n % i == 0){
+                            isPrime = false;
+                            break;
                         }
                     }
+                    if(isPrime){
+                        ans++;
+                        Debug.Put($"{n} is prime");
+                    }
                 }
+                WriteLine(ans);
             }
-            return false;
-
-
         }
 
 
@@ -213,7 +197,7 @@ namespace ZONe2021{
         }
     }
      // 同じ拡張メソッドは同一namespace内で定義できないのでnamespaceを問題ごとに分ける
-    namespace SolverCExtensions{
+    namespace SolverBExtensions{
         static class ArrayExtensions{
             public static T[] Fill<T>(this T[] arr, T val){
                 for(int i=0; i<arr.Length; i++){

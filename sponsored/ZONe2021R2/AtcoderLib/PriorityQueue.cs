@@ -78,6 +78,5 @@ namespace AtcoderLib{
                 heap[indexA] = heap[indexB];
                 heap[indexB] = tmp;
             }
-        } // Priority Queue ここまで
-        
+        }
 }
